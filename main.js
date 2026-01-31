@@ -151,3 +151,28 @@ function closeVideo(){
 
 /* INIT */
 renderCart();
+
+/* HOME SLIDER (USES SAME PRODUCTS) */
+db.collection("products").onSnapshot(snapshot=>{
+  const track = document.getElementById("homeSliderTrack");
+  if(!track) return;
+
+  track.innerHTML = "";
+
+  snapshot.forEach(doc=>{
+    const p = doc.data();
+    const poster = p.video
+      .replace("/upload/","/upload/so_0/")
+      .replace(".mp4",".jpg");
+
+    track.innerHTML += `
+      <div class="slider-card" onclick="navigate('products')">
+        <img src="${poster}">
+      </div>
+    `;
+  });
+
+  // duplicate for smooth infinite scroll
+  track.innerHTML += track.innerHTML;
+});
+
