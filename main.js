@@ -23,129 +23,151 @@ function loginAdmin(e){
     });
 }
 
-/* ================= UPLOAD PRODUCT ================= */
-function uploadProduct(){
-  const name  = pName.value.trim();
-  const price = Number(pPrice.value);
-  const video = pVideo.value.trim();
-  const badge = pBadge.value;
-
-  if(!name || !price || !video){
-    uploadStatus.innerText="❌ Fill all fields";
-    return;
-  }
-
-  uploadStatus.innerText="Uploading...";
-
-  db.collection("products").add({
-    name,
-    price,
-    video,
-    badge,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  })
-  .then(()=>{
-    uploadStatus.innerText="✅ Product added";
-    pName.value="";
-    pPrice.value="";
-    pVideo.value="";
-    pBadge.value="";
-  })
-  .catch(err=>{
-    uploadStatus.innerText="❌ "+err.message;
-  });
-}
-
-/* ================= CART ================= */
+/* ================= CART STATE ================= */
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+/* ================= CART TOGGLE ================= */
 function toggleCart(){
   document.getElementById("cart").classList.toggle("open");
   renderCart();
 }
 
+/* ================= SAVE CART ================= */
 function saveCart(){
   localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartCount();
   renderCart();
 }
 
+/* ================= ADD TO CART ================= */
 function addToCart(id, name, price){
   const size = document.getElementById(`size-${id}`).value;
-  if(!size){ alert("Select size"); return; }
+  if(!size){
+    alert("Please select a size");
+    return;
+  }
 
   const item = cart.find(i=>i.id===id && i.size===size);
-  if(item) item.qty++;
-  else cart.push({id,name,price,size,qty:1});
+  if(item){
+    item.qty++;
+  } else {
+    cart.push({id,name,price,size,qty:1});
+  }
 
   saveCart();
   toggleCart();
 }
 
-function changeQty(i,d){
-  cart[i].qty+=d;
-  if(cart[i].qty<=0) cart.splice(i,1);
+/* ================= CHANGE QTY ================= */
+function changeQty(index, delta){
+  cart[index].qty += delta;
+  if(cart[index].qty <= 0){
+    cart.splice(index,1);
+  }
   saveCart();
 }
 
-function removeItem(i){
-  cart.splice(i,1);
+/* ================= REMOVE ITEM ================= */
+function removeItem(index){
+  cart.splice(index,1);
   saveCart();
 }
 
+/* ================= CART COUNT ================= */
+function updateCartCount(){
+  const badge = document.getElementById("cartCount");
+  const count = cart.reduce((s,i)=>s+i.qty,0);
+
+  if(count > 0){
+    badge.style.display="flex";
+    badge.innerText = count;
+  } else {
+    badge.style.display="none";
+  }
+}
+
+/* ================= RENDER CART ================= */
 function renderCart(){
-  const items=document.getElementById("cartItems");
-  const totalEl=document.getElementById("cartTotal");
-  const empty=document.getElementById("emptyCartMsg");
-  const checkoutBtn=document.querySelector("#cart button");
+  const itemsDiv = document.getElementById("cartItems");
+  const emptyMsg = document.getElementById("emptyCartMsg");
 
-  items.innerHTML="";
-  let total=0;
+  itemsDiv.innerHTML="";
 
-  if(cart.length===0){
-    empty.style.display="block";
-    checkoutBtn.style.display="none";
-    totalEl.innerText="0";
+  if(cart.length === 0){
+    emptyMsg.style.display="block";
     return;
   }
 
-  empty.style.display="none";
-  checkoutBtn.style.display="block";
+  emptyMsg.style.display="none";
 
-  cart.forEach((i,idx)=>{
-    total+=i.price*i.qty;
-    items.innerHTML+=`
-      <div style="margin-bottom:12px">
-        <b>${i.name}</b><br>
-        Size: ${i.size}<br>
-        ₹${i.price} × ${i.qty}
-        <div>
-          <button onclick="changeQty(${idx},-1)">−</button>
-          <button onclick="changeQty(${idx},1)">+</button>
-          <button onclick="removeItem(${idx})">Remove</button>
+  cart.forEach((item,i)=>{
+    itemsDiv.innerHTML += `
+      <div style="
+        margin-bottom:14px;
+        padding-bottom:10px;
+        border-bottom:1px solid #eee
+      ">
+        <strong>${item.name}</strong><br>
+        <small>Size: ${item.size}</small><br>
+        ₹${item.price} × ${item.qty}
+
+        <div style="margin-top:6px;display:flex;gap:6px">
+          <button onclick="changeQty(${i},-1)">−</button>
+          <button onclick="changeQty(${i},1)">+</button>
+          <button onclick="removeItem(${i})">Remove</button>
         </div>
       </div>
     `;
   });
+}
 
-  totalEl.innerText=total;
+/* ================= WHATSAPP CHECKOUT ================= */
+function checkoutWhatsApp(){
+  if(cart.length === 0){
+    alert("Your cart is empty");
+    return;
+  }
+
+  let msg = `🖤 *The Qatari Abaya by Teepee's* 🖤\n\n`;
+  msg += `📦 *New Order*\n\n`;
+
+  let total = 0;
+
+  cart.forEach((item,i)=>{
+    total += item.price * item.qty;
+    msg += `${i+1}. ${item.name}\n`;
+    msg += `   Size: ${item.size}\n`;
+    msg += `   Qty: ${item.qty}\n`;
+    msg += `   ₹${item.price * item.qty}\n\n`;
+  });
+
+  msg += `💰 *Total:* ₹${total}\n`;
+  msg += `🕒 ${new Date().toLocaleString()}\n\n`;
+  msg += `Please confirm availability`;
+
+  const phone = "9172081816783";
+  window.open(
+    `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,
+    "_blank"
+  );
 }
 
 /* ================= LOAD PRODUCTS ================= */
 db.collection("products")
 .orderBy("createdAt","desc")
 .onSnapshot(snap=>{
-  const grid=document.getElementById("productGrid");
+  const grid = document.getElementById("productGrid");
   if(!grid) return;
 
   grid.innerHTML="";
 
   snap.forEach(doc=>{
-    const p=doc.data();
-    const poster=p.video
+    const p = doc.data();
+    const poster = p.video
       .replace("/upload/","/upload/so_0/")
       .replace(".mp4",".jpg");
 
-    grid.innerHTML+=`
+    grid.innerHTML += `
       <div class="product-card">
         <img src="${poster}" class="product-thumb"
              onclick="openVideo('${p.video}')">
@@ -155,7 +177,7 @@ db.collection("products")
           <p>₹${p.price}</p>
 
           <select id="size-${doc.id}">
-            <option value="">Size</option>
+            <option value="">Select Size</option>
             <option>S</option><option>M</option>
             <option>L</option><option>XL</option><option>XXL</option>
           </select>
@@ -172,7 +194,7 @@ db.collection("products")
 /* ================= VIDEO MODAL ================= */
 function openVideo(src){
   videoModal.style.display="flex";
-  modalVideo.src=src+"#t=0.1";
+  modalVideo.src = src + "#t=0.1";
   modalVideo.load();
 }
 function closeVideo(){
@@ -182,4 +204,5 @@ function closeVideo(){
 }
 
 /* INIT */
+updateCartCount();
 renderCart();
