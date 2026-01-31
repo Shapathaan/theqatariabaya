@@ -18,7 +18,7 @@
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family: "Georgia","Times New Roman",serif;
+  font-family:"Georgia","Times New Roman",serif;
 }
 body{
   background:var(--bg);
@@ -35,7 +35,6 @@ body{
   align-items:center;
   justify-content:center;
 }
-
 #landing video{
   position:absolute;
   inset:0;
@@ -43,14 +42,12 @@ body{
   height:100%;
   object-fit:cover;
 }
-
 .landing-overlay{
   position:relative;
   z-index:2;
   text-align:center;
   padding:0 20px;
 }
-
 .landing-overlay h1{
   color:var(--gold);
   font-size:clamp(34px,6vw,60px);
@@ -58,20 +55,10 @@ body{
   opacity:0;
   animation:titleReveal 2.8s ease forwards;
 }
-
 @keyframes titleReveal{
-  from{
-    opacity:0;
-    letter-spacing:40px;
-    transform:translateY(40px);
-  }
-  to{
-    opacity:1;
-    letter-spacing:14px;
-    transform:translateY(0);
-  }
+  from{opacity:0;letter-spacing:40px;transform:translateY(40px)}
+  to{opacity:1;letter-spacing:14px;transform:translateY(0)}
 }
-
 .landing-overlay p{
   margin-top:18px;
   font-size:15px;
@@ -81,7 +68,6 @@ body{
   animation:fadeIn 2s ease forwards;
   animation-delay:2.8s;
 }
-
 .landing-overlay button{
   margin-top:42px;
   padding:16px 52px;
@@ -96,10 +82,7 @@ body{
   animation:fadeIn 2s ease forwards;
   animation-delay:4.5s;
 }
-
-@keyframes fadeIn{
-  to{opacity:1}
-}
+@keyframes fadeIn{to{opacity:1}}
 
 /* ================= HEADER ================= */
 header{
@@ -151,10 +134,7 @@ header{
 }
 
 /* ================= SECTIONS ================= */
-section{
-  display:none;
-  padding:32px 16px;
-}
+section{display:none;padding:32px 16px}
 section.active{display:block}
 .section-inner{
   max-width:1200px;
@@ -162,48 +142,34 @@ section.active{display:block}
   text-align:center;
 }
 
-/* ================= PRODUCT GRID (FIXED) ================= */
+/* ================= PRODUCT GRID ================= */
 #productGrid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:18px;
   margin-top:24px;
 }
-
 .product-card{
   background:#fff;
   border-radius:16px;
   overflow:hidden;
   box-shadow:0 12px 24px rgba(0,0,0,.18);
 }
-
 .product-thumb{
   width:100%;
   height:200px;
   object-fit:cover;
   cursor:pointer;
 }
+.product-info{padding:10px}
+.product-info h4{font-size:15px;margin-bottom:4px}
+.product-info p{color:var(--maroon);font-weight:700}
 
-.product-info{
-  padding:10px;
-}
-.product-info h4{
-  font-size:15px;
-  margin-bottom:4px;
-}
-.product-info p{
-  color:var(--maroon);
-  font-weight:700;
-}
-
-/* Tablet */
 @media(max-width:1000px){
   #productGrid{grid-template-columns:repeat(3,1fr)}
 }
-
-/* Mobile */
 @media(max-width:600px){
-  #productGrid{grid-template-columns:repeat(2,1fr);gap:14px}
+  #productGrid{grid-template-columns:repeat(2,1fr)}
   .product-thumb{height:150px}
 }
 
@@ -224,7 +190,6 @@ section.active{display:block}
   cursor:pointer;
   z-index:1000;
 }
-
 .cart-drawer{
   position:fixed;
   top:0;
@@ -249,11 +214,7 @@ section.active{display:block}
   justify-content:center;
 }
 
-footer{
-  text-align:center;
-  padding:16px;
-  opacity:.6;
-}
+footer{text-align:center;padding:16px;opacity:.6}
 </style>
 </head>
 
@@ -269,15 +230,12 @@ footer{
   </div>
 </div>
 
-<!-- MAIN SITE -->
 <header>
   <div class="logo"><img src="icon-192.png"></div>
   <div class="admin-btn" onclick="navigate('admin')">Admin</div>
 </header>
 
-<div class="banner">
-  <img src="qatari.png">
-</div>
+<div class="banner"><img src="qatari.png"></div>
 
 <div class="glass-menu">
   <button onclick="navigate('products')">Products</button>
@@ -309,22 +267,36 @@ footer{
   </div>
 </section>
 
-<section id="checkout">
-  <div class="section-inner">
-    <h2>Checkout</h2>
-    <img src="UPI_QR.png" style="width:220px;margin:20px auto;display:block">
-  </div>
-</section>
-
 <section id="admin">
-  <div class="section-inner">
-    <h2>Admin Login</h2>
+  <div class="section-inner" style="max-width:420px">
+    <h2>Admin Panel</h2>
+
+    <!-- LOGIN -->
     <form onsubmit="loginAdmin(event)">
       <input id="adminEmail" placeholder="Admin Email" required>
       <input id="adminPassword" type="password" placeholder="Password" required>
       <button type="submit">Login</button>
     </form>
+
     <p id="loginStatus"></p>
+
+    <!-- UPLOAD PANEL -->
+    <div id="adminPanel" style="display:none;margin-top:30px;text-align:left">
+      <h3>Add Product</h3>
+
+      <input id="pName" placeholder="Product Name">
+      <input id="pPrice" type="number" placeholder="Price (₹)">
+      <input id="pVideo" placeholder="Cloudinary Video URL (.mp4)">
+
+      <select id="pBadge">
+        <option value="">No Badge</option>
+        <option value="NEW">NEW</option>
+        <option value="BESTSELLER">BESTSELLER</option>
+      </select>
+
+      <button onclick="uploadProduct()">Upload Product</button>
+      <p id="uploadStatus"></p>
+    </div>
   </div>
 </section>
 
@@ -335,27 +307,11 @@ footer{
     <h3>Your Cart</h3>
     <span onclick="toggleCart()" style="cursor:pointer">✕</span>
   </div>
-
   <div id="cartItems" style="margin-top:16px"></div>
-
-  <p id="emptyCartMsg" style="margin-top:20px;opacity:.6">
-    Your cart is empty
-  </p>
-
-  <button onclick="checkoutWhatsApp()"
-    width:100%;
-    margin-top:14px;
-    padding:12px;
-    background:#8A1538;
-    color:#fff;
-    border:none;
-    border-radius:10px;
-    font-weight:700">
-    Proceed to Checkout
-  </button>
+  <p id="emptyCartMsg" style="margin-top:20px;opacity:.6">Your cart is empty</p>
+  <button onclick="checkoutWhatsApp()">Proceed to Checkout</button>
 </div>
 
-<!-- VIDEO MODAL -->
 <div id="videoModal" onclick="closeVideo()">
   <video id="modalVideo" controls playsinline preload="none"
     style="width:90%;max-width:420px;background:black"></video>
@@ -363,7 +319,6 @@ footer{
 
 <footer>© 2025 The Qatari Abaya by Teepee's</footer>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -375,9 +330,8 @@ firebase.initializeApp({
   projectId:"qatri-abaya"
 });
 
-/* ENTER SITE */
 function enterSite(){
-  document.getElementById("landing").style.display="none";
+  landing.style.display="none";
   document.querySelector("header").style.display="flex";
   document.querySelector(".banner").style.display="block";
   document.querySelector(".glass-menu").style.display="flex";
