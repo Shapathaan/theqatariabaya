@@ -175,4 +175,45 @@ db.collection("products").onSnapshot(snapshot=>{
   // duplicate for smooth infinite scroll
   track.innerHTML += track.innerHTML;
 });
+function placeOrder(){
+  if(cart.length === 0){
+    alert("Your cart is empty");
+    return;
+  }
+
+  const name = custName.value.trim();
+  const phone = custPhone.value.trim();
+  const address = custAddress.value.trim();
+
+  if(!name || !phone){
+    alert("Please fill name & phone");
+    return;
+  }
+
+  let message = `🛍️ *New Order – The Qatari Abaya*\n\n`;
+  message += `👤 Name: ${name}\n`;
+  message += `📞 Phone: ${phone}\n`;
+  message += `📍 Address: ${address}\n\n`;
+  message += `🧾 Order Details:\n`;
+
+  let total = 0;
+  cart.forEach(item=>{
+    message += `• ${item.name} (${item.size}) × ${item.qty} = ₹${item.price * item.qty}\n`;
+    total += item.price * item.qty;
+  });
+
+  message += `\n💰 Total: ₹${total}\n`;
+  message += `🕒 ${new Date().toLocaleString()}\n`;
+  message += `\n✅ Payment done via UPI`;
+
+  const whatsappURL =
+    `https://wa.me/918759134555?text=${encodeURIComponent(message)}`;
+
+  window.open(whatsappURL, "_blank");
+
+  cart = [];
+  saveCart();
+  navigate('home');
+}
+
 
