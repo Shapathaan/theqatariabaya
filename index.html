@@ -9,17 +9,26 @@
 :root{
   --maroon:#8A1538;
   --gold:#F5E6C8;
-  --white:#F1F1F1;
+  --white:#ffffff;
+  --bg:#f4f4f4;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif}
-body{background:#fff;overflow:hidden}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Segoe UI,sans-serif;
+}
 
 /* ================= LANDING ================= */
+body{
+  background:#fff;
+}
+
 #landing{
   position:fixed;
   inset:0;
-  background:linear-gradient(145deg,#8A1538,#6b102c);
+  background:linear-gradient(145deg,#8A1538,#5e0f2a);
   z-index:3000;
   display:flex;
   align-items:center;
@@ -27,67 +36,68 @@ body{background:#fff;overflow:hidden}
   overflow:hidden;
 }
 
-/* FLAG ACCENT */
+.skip{
+  position:absolute;
+  top:20px;
+  right:20px;
+  color:rgba(255,255,255,.7);
+  font-size:13px;
+  cursor:pointer;
+  z-index:5;
+}
+
+/* QATARI FLAG SHAPE */
 .flag{
   position:absolute;
-  left:-30%;
+  left:-35%;
   top:0;
   width:60%;
   height:100%;
-  background:rgba(255,255,255,.08);
+  background:rgba(255,255,255,.10);
   clip-path:polygon(
     0 0,90% 0,100% 6%,90% 12%,100% 18%,90% 24%,100% 30%,
     90% 36%,100% 42%,90% 48%,100% 54%,90% 60%,100% 66%,
     90% 72%,100% 78%,90% 84%,100% 90%,90% 100%,0 100%
   );
-  animation:flagMove 3.5s ease forwards;
+  animation:flagSlide 4.5s ease forwards;
 }
-
-@keyframes flagMove{
+@keyframes flagSlide{
   to{left:0}
 }
 
-/* BRAND */
 .brand{
-  position:relative;
-  z-index:2;
   text-align:center;
-  max-width:90%;
+  z-index:2;
   opacity:0;
-  animation:brandFade 2.2s ease forwards;
-  animation-delay:1.8s;
+  animation:brandFade 2.4s ease forwards;
+  animation-delay:2.2s;
 }
-
-@keyframes brandFade{
-  to{opacity:1}
-}
+@keyframes brandFade{to{opacity:1}}
 
 .brand h1{
-  font-size:clamp(36px,6vw,58px);
-  letter-spacing:8px;
   color:var(--gold);
-  animation:titleReveal 2.4s ease forwards;
+  font-size:clamp(38px,7vw,64px);
+  letter-spacing:26px;
+  animation:titleReveal 2.8s ease forwards;
 }
-
 @keyframes titleReveal{
-  from{letter-spacing:26px;opacity:0;transform:translateY(30px)}
-  to{letter-spacing:8px;opacity:1;transform:translateY(0)}
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;letter-spacing:8px;transform:translateY(0)}
 }
 
 .brand p{
-  margin-top:16px;
+  margin-top:18px;
+  color:#f1f1f1;
   font-size:15px;
   letter-spacing:2px;
-  color:var(--white);
   opacity:0;
-  animation:fadeIn 1.8s ease forwards;
-  animation-delay:3.6s;
+  animation:fadeIn 2s ease forwards;
+  animation-delay:4.8s;
 }
 
-/* BUTTON */
 .shop-btn{
   margin-top:46px;
-  padding:16px 48px;
+  padding:16px 52px;
   background:transparent;
   color:var(--gold);
   border:2px solid var(--gold);
@@ -96,68 +106,144 @@ body{background:#fff;overflow:hidden}
   letter-spacing:2px;
   cursor:pointer;
   opacity:0;
-  animation:fadeIn 1.8s ease forwards;
-  animation-delay:4.6s;
-  box-shadow:0 0 0 rgba(245,230,200,0);
+  animation:fadeIn 2s ease forwards;
+  animation-delay:6.2s;
   transition:.4s;
 }
-
 .shop-btn:hover{
   background:var(--gold);
-  color:#6b102c;
-  box-shadow:0 0 25px rgba(245,230,200,.6);
+  color:#5e0f2a;
+  box-shadow:0 0 30px rgba(245,230,200,.7);
 }
 
 @keyframes fadeIn{to{opacity:1}}
 
-/* ================= MAIN SITE (HIDDEN INITIALLY) ================= */
-header,.glass-menu,.cart-btn{display:none}
+/* ================= MAIN SITE ================= */
+header,
+.glass-menu,
+.cart-btn{
+  display:none;
+}
 
-/* HEADER */
+body.entered header,
+body.entered .glass-menu,
+body.entered .cart-btn{
+  display:flex;
+}
+
 header{
-  position:fixed;top:0;left:0;right:0;
+  position:fixed;
+  top:0;left:0;right:0;
   background:#fff;
   border-bottom:3px solid var(--maroon);
   padding:10px 16px;
-  display:flex;justify-content:space-between;align-items:center;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   z-index:1000;
 }
 .logo img{height:52px}
 .admin-btn{color:var(--maroon);font-weight:700;cursor:pointer}
 
-/* MENU */
 .glass-menu{
-  display:flex;justify-content:center;gap:14px;
-  margin:100px auto 20px;
+  margin-top:90px;
+  display:flex;
+  justify-content:center;
+  gap:14px;
   padding:12px 18px;
+  width:fit-content;
+  margin-left:auto;
+  margin-right:auto;
   border-radius:22px;
-  background:rgba(255,255,255,.75);
+  background:rgba(255,255,255,.7);
   backdrop-filter:blur(14px);
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
 }
 
-/* SECTIONS */
-section{display:none;padding:32px 16px}
+.glass-menu button{
+  padding:10px 18px;
+  background:linear-gradient(145deg,#8A1538,#5e0f2a);
+  color:#fff;
+  border:none;
+  border-radius:16px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+section{
+  display:none;
+  padding:32px 16px;
+}
 section.active{display:block}
-.section-inner{max-width:1200px;margin:0 auto;text-align:center}
+
+.section-inner{
+  max-width:1200px;
+  margin:0 auto;
+  text-align:center;
+}
+
+/* PRODUCTS GRID */
+#productGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  margin-top:24px;
+}
+
+@media(max-width:600px){
+  #productGrid{
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+  }
+}
 
 /* CART */
 .cart-btn{
-  position:fixed;bottom:20px;right:20px;
-  width:56px;height:56px;
-  background:var(--maroon);color:#fff;
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:56px;
+  height:56px;
+  background:var(--maroon);
+  color:#fff;
   border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;cursor:pointer;z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  cursor:pointer;
+  z-index:1000;
 }
+
 .cart-drawer{
-  position:fixed;top:0;right:-100%;
-  width:320px;height:100%;
-  background:#fff;padding:16px;
-  transition:.3s;z-index:1001;
+  position:fixed;
+  top:0;
+  right:-100%;
+  width:320px;
+  height:100%;
+  background:#fff;
+  padding:16px;
+  transition:.3s;
+  z-index:1001;
 }
 .cart-drawer.open{right:0}
 
-footer{text-align:center;padding:16px;opacity:.6}
+/* VIDEO MODAL */
+#videoModal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  z-index:2000;
+  align-items:center;
+  justify-content:center;
+}
+
+footer{
+  text-align:center;
+  padding:16px;
+  opacity:.6;
+}
 </style>
 </head>
 
@@ -165,6 +251,7 @@ footer{text-align:center;padding:16px;opacity:.6}
 
 <!-- LANDING -->
 <div id="landing">
+  <div class="skip" onclick="enterSite()">Skip</div>
   <div class="flag"></div>
   <div class="brand">
     <h1>THE QATARI ABAYA</h1>
@@ -186,28 +273,104 @@ footer{text-align:center;padding:16px;opacity:.6}
   <button onclick="navigate('checkout')">Checkout</button>
 </div>
 
-<section id="products"><div class="section-inner"><h2>Our Collection</h2><div id="productGrid"></div></div></section>
-<section id="about"><div class="section-inner"><h2>About</h2></div></section>
-<section id="contact"><div class="section-inner"><h2>Contact</h2></div></section>
-<section id="checkout"><div class="section-inner"><h2>Checkout</h2></div></section>
-<section id="admin"><div class="section-inner"><h2>Admin</h2></div></section>
+<section id="products" class="active">
+  <div class="section-inner">
+    <h2>Our Collection</h2>
+    <div id="productGrid"></div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-inner">
+    <h2>About</h2>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-inner">
+    <h2>Contact</h2>
+    <p>WhatsApp: +91-87591345556</p>
+  </div>
+</section>
+
+<section id="checkout">
+  <div class="section-inner">
+    <h2>Checkout</h2>
+
+    <input id="custName" placeholder="Full Name">
+    <input id="custPhone" placeholder="WhatsApp Number">
+    <textarea id="custAddress" placeholder="Delivery Address" rows="3"></textarea>
+
+    <img src="UPI_QR.png" style="width:220px;margin:20px auto;display:block">
+
+    <button onclick="placeOrder()" style="
+      width:100%;
+      padding:14px;
+      background:#8A1538;
+      color:#fff;
+      border:none;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer">
+      Pay & Place Order
+    </button>
+  </div>
+</section>
+
+<section id="admin">
+  <div class="section-inner">
+    <h2>Admin Login</h2>
+    <form onsubmit="loginAdmin(event)">
+      <input id="adminEmail" placeholder="Admin Email" required>
+      <input id="adminPassword" type="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <p id="loginStatus"></p>
+  </div>
+</section>
 
 <div class="cart-btn" onclick="toggleCart()">🛒</div>
+
 <div class="cart-drawer" id="cart">
-  <div id="cartItems"></div>
+  <div style="display:flex;justify-content:space-between">
+    <h3>Your Cart</h3>
+    <span style="cursor:pointer" onclick="toggleCart()">✕</span>
+  </div>
+  <div id="cartItems" style="margin-top:16px"></div>
   <h3>Total: ₹<span id="cartTotal">0</span></h3>
+</div>
+
+<!-- VIDEO MODAL -->
+<div id="videoModal" onclick="closeVideo()">
+  <video id="modalVideo" controls playsinline preload="none"
+    style="width:90%;max-width:420px;background:black"></video>
 </div>
 
 <footer>© 2025 The Qatari Abaya by Teepee's</footer>
 
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <script>
-function enterSite(){
+firebase.initializeApp({
+  apiKey:"AIzaSyAxJI4LaZu5AQyk4jJ0LTthxCGXQeJBaRQ",
+  authDomain:"qatri-abaya.firebaseapp.com",
+  projectId:"qatri-abaya"
+});
+
+(function(){
+  if(localStorage.getItem("hasSeenLanding")==="true"){
+    enterSite(true);
+  }
+})();
+
+function enterSite(skip){
+  localStorage.setItem("hasSeenLanding","true");
   document.getElementById("landing").style.display="none";
-  document.body.style.overflow="auto";
-  document.querySelector("header").style.display="flex";
-  document.querySelector(".glass-menu").style.display="flex";
-  document.querySelector(".cart-btn").style.display="flex";
-  navigate('products');
+  document.body.classList.add("entered");
+  if(!skip) navigate('products');
 }
 </script>
 
