@@ -19,8 +19,7 @@ let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 /* ================= CART TOGGLE ================= */
 function toggleCart(){
-  const drawer = document.getElementById("cart");
-  drawer.classList.toggle("open");
+  document.getElementById("cart").classList.toggle("open");
   renderCart();
 }
 
@@ -77,14 +76,14 @@ function renderCart(){
   let total = 0;
 
   if(cart.length === 0){
-    emptyMsg.style.display = "block";
-    checkoutBtn.style.display = "none";
-    totalEl.innerText = "0";
+    emptyMsg.style.display="block";
+    checkoutBtn.style.display="none";
+    totalEl.innerText="0";
     return;
   }
 
-  emptyMsg.style.display = "none";
-  checkoutBtn.style.display = "block";
+  emptyMsg.style.display="none";
+  checkoutBtn.style.display="block";
 
   cart.forEach((item,i)=>{
     total += item.price * item.qty;
@@ -106,6 +105,35 @@ function renderCart(){
   totalEl.innerText = total;
 }
 
+/* ================= WHATSAPP CHECKOUT ================= */
+function checkoutWhatsApp(){
+  if(cart.length === 0){
+    alert("Your cart is empty");
+    return;
+  }
+
+  let message = `🖤 *The Qatari Abaya by Teepee's* 🖤\n\n`;
+  message += `📦 *New Order Received*\n\n`;
+
+  let total = 0;
+
+  cart.forEach((item, i) => {
+    total += item.price * item.qty;
+    message += `${i+1}. ${item.name}\n`;
+    message += `   • Size: ${item.size}\n`;
+    message += `   • Qty: ${item.qty}\n`;
+    message += `   • Price: ₹${item.price * item.qty}\n\n`;
+  });
+
+  message += `💰 *Total Amount:* ₹${total}\n\n`;
+  message += `🕒 ${new Date().toLocaleString()}\n\n`;
+  message += `✨ Please confirm availability & delivery ✨`;
+
+  const phone = "9172081816783";
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+}
+
 /* ================= FIRESTORE ================= */
 const db = firebase.firestore();
 
@@ -118,7 +146,6 @@ db.collection("products").onSnapshot(snapshot=>{
 
   snapshot.forEach(doc=>{
     const p = doc.data();
-
     const poster = p.video
       .replace("/upload/","/upload/so_0/")
       .replace(".mp4",".jpg");
@@ -134,22 +161,13 @@ db.collection("products").onSnapshot(snapshot=>{
 
           <select id="size-${doc.id}" style="width:100%;margin:6px 0">
             <option value="">Select Size</option>
-            <option>S</option>
-            <option>M</option>
-            <option>L</option>
-            <option>XL</option>
-            <option>XXL</option>
+            <option>S</option><option>M</option>
+            <option>L</option><option>XL</option><option>XXL</option>
           </select>
 
           <button onclick="addToCart('${doc.id}','${p.name}',${p.price})"
-            style="
-              width:100%;
-              padding:10px;
-              background:#8A1538;
-              color:#fff;
-              border:none;
-              border-radius:10px;
-              cursor:pointer">
+            style="width:100%;padding:10px;background:#8A1538;
+            color:#fff;border:none;border-radius:10px">
             Add to Cart
           </button>
         </div>
@@ -160,21 +178,16 @@ db.collection("products").onSnapshot(snapshot=>{
 
 /* ================= VIDEO MODAL ================= */
 function openVideo(src){
-  const modal = document.getElementById("videoModal");
-  const video = document.getElementById("modalVideo");
-
+  const modal=document.getElementById("videoModal");
+  const video=document.getElementById("modalVideo");
   modal.style.display="flex";
   video.src = src + "#t=0.1";
   video.load();
 }
-
 function closeVideo(){
-  const modal = document.getElementById("videoModal");
-  const video = document.getElementById("modalVideo");
-
-  video.pause();
-  video.src="";
-  modal.style.display="none";
+  modalVideo.pause();
+  modalVideo.src="";
+  videoModal.style.display="none";
 }
 
 /* ================= INIT ================= */
