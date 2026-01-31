@@ -14,9 +14,80 @@ function loginAdmin(e){
     .catch(err=>loginStatus.innerText="❌ "+err.message);
 }
 
-/* CART */
+/* CART STATE */
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+/* CART UI */
 function toggleCart(){
   document.getElementById("cart").classList.toggle("open");
+}
+
+/* SAVE CART */
+function saveCart(){
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+/* ADD TO CART */
+function addToCart(id, name, price){
+  const size = document.getElementById(`size-${id}`).value;
+  if(!size){
+    alert("Please select a size");
+    return;
+  }
+
+  const existing = cart.find(i => i.id===id && i.size===size);
+  if(existing){
+    existing.qty += 1;
+  } else {
+    cart.push({id, name, price, size, qty:1});
+  }
+
+  saveCart();
+  toggleCart();
+}
+
+/* REMOVE ITEM */
+function removeItem(index){
+  cart.splice(index,1);
+  saveCart();
+}
+
+/* CHANGE QTY */
+function changeQty(index, delta){
+  cart[index].qty += delta;
+  if(cart[index].qty <= 0) cart.splice(index,1);
+  saveCart();
+}
+
+/* RENDER CART */
+function renderCart(){
+  const itemsDiv = document.getElementById("cartItems");
+  const totalEl  = document.getElementById("cartTotal");
+
+  if(!itemsDiv) return;
+
+  itemsDiv.innerHTML="";
+  let total = 0;
+
+  cart.forEach((item,i)=>{
+    total += item.price * item.qty;
+
+    itemsDiv.innerHTML += `
+      <div style="margin-bottom:12px">
+        <strong>${item.name}</strong><br>
+        Size: ${item.size}<br>
+        ₹${item.price} × ${item.qty}
+        <div>
+          <button onclick="changeQty(${i},-1)">−</button>
+          <button onclick="changeQty(${i},1)">+</button>
+          <button onclick="removeItem(${i})">Remove</button>
+        </div>
+      </div>
+    `;
+  });
+
+  totalEl.innerText = total;
 }
 
 /* FIRESTORE */
@@ -31,21 +102,30 @@ db.collection("products")
 
   snapshot.forEach(doc=>{
     const p=doc.data();
-
     const poster = p.video
       .replace("/upload/","/upload/so_0/")
       .replace(".mp4",".jpg");
 
     grid.innerHTML += `
       <div class="product-card">
-        <img
-          src="${poster}"
-          class="product-thumb"
-          onclick="openVideo('${p.video}')"
-        >
+        <img src="${poster}" class="product-thumb"
+             onclick="openVideo('${p.video}')">
+
         <div class="product-info">
           <h4>${p.name}</h4>
           <p>₹${p.price}</p>
+
+          <select id="size-${doc.id}" style="width:100%;margin:6px 0">
+            <option value="">Select Size</option>
+            <option>S</option><option>M</option>
+            <option>L</option><option>XL</option><option>XXL</option>
+          </select>
+
+          <button onclick="addToCart('${doc.id}','${p.name}',${p.price})"
+            style="width:100%;padding:10px;background:#8A1538;color:#fff;
+            border:none;border-radius:10px;cursor:pointer">
+            Add to Cart
+          </button>
         </div>
       </div>
     `;
@@ -58,7 +138,7 @@ function openVideo(src){
   const video=document.getElementById("modalVideo");
   modal.style.display="flex";
   video.src = src;
-  video.load(); // user taps play (mobile safe)
+  video.load();
 }
 
 function closeVideo(){
@@ -68,3 +148,6 @@ function closeVideo(){
   video.src="";
   modal.style.display="none";
 }
+
+/* INIT */
+renderCart();
