@@ -18,73 +18,78 @@ body{background:#fff;overflow:hidden}
 #landing{
   position:fixed;
   inset:0;
-  background:var(--maroon);
   z-index:3000;
   display:flex;
-  align-items:center;
-  justify-content:center;
+}
+
+/* FLAG SIDE */
+.flag-panel{
+  width:45%;
+  background:#fff;
+  position:relative;
   overflow:hidden;
 }
 
-/* QATAR FLAG */
 .flag{
   position:absolute;
-  left:-120%;
-  top:0;
-  height:100%;
-  width:72%;
+  inset:0;
   background:#fff;
-  z-index:1;
   clip-path:polygon(
-    0 0,95% 0,100% 6%,95% 12%,100% 18%,95% 24%,100% 30%,
-    95% 36%,100% 42%,95% 48%,100% 54%,95% 60%,100% 66%,
-    95% 72%,100% 78%,95% 84%,100% 90%,95% 96%,100% 100%,0 100%
+    0 0,90% 0,100% 6%,90% 12%,100% 18%,90% 24%,100% 30%,
+    90% 36%,100% 42%,90% 48%,100% 54%,90% 60%,100% 66%,
+    90% 72%,100% 78%,90% 84%,100% 90%,90% 100%,0 100%
   );
-  animation:flagIn 2.2s ease forwards;
+  animation:flagIn 2.4s ease forwards;
+  transform:translateX(-100%);
 }
 
 @keyframes flagIn{
-  to{left:0}
+  to{transform:translateX(0)}
 }
 
-/* BRAND TEXT */
-.brand{
-  position:relative;
-  z-index:2;
-  text-align:center;
+/* BRAND SIDE */
+.brand-panel{
+  width:55%;
+  background:var(--maroon);
+  display:flex;
+  align-items:center;
+  justify-content:center;
   color:#fff;
-  opacity:0;
-  transform:scale(.85);
-  animation:brandIn 1.8s ease forwards;
-  animation-delay:2.2s;
+  text-align:center;
 }
 
-@keyframes brandIn{
-  to{opacity:1;transform:scale(1)}
+.brand{
+  opacity:0;
+  animation:brandFade 1.6s ease forwards;
+  animation-delay:2.4s;
+}
+
+@keyframes brandFade{
+  to{opacity:1}
 }
 
 .brand h1{
-  font-size:46px;
-  letter-spacing:6px;
-  animation:letterIn 1.8s ease forwards;
+  font-size:48px;
+  letter-spacing:5px;
+  margin-bottom:14px;
+  animation:titleReveal 1.6s ease forwards;
 }
 
-@keyframes letterIn{
+@keyframes titleReveal{
   from{letter-spacing:20px;opacity:0}
-  to{letter-spacing:6px;opacity:1}
+  to{letter-spacing:5px;opacity:1}
 }
 
 .brand p{
-  margin-top:12px;
+  opacity:.9;
   font-size:16px;
-  opacity:0;
-  animation:fadeIn 1.4s ease forwards;
+  margin-bottom:30px;
+  animation:fadeIn 1.2s ease forwards;
   animation-delay:3.6s;
+  opacity:0;
 }
 
-/* SHOP BUTTON */
 .shop-btn{
-  margin-top:40px;
   padding:16px 44px;
   background:#fff;
   color:var(--maroon);
@@ -94,12 +99,30 @@ body{background:#fff;overflow:hidden}
   font-size:17px;
   cursor:pointer;
   opacity:0;
-  animation:fadeIn 1.4s ease forwards;
+  animation:fadeIn 1.2s ease forwards;
   animation-delay:4.4s;
 }
 
-@keyframes fadeIn{
-  to{opacity:1}
+@keyframes fadeIn{to{opacity:1}}
+
+/* ================= MOBILE ================= */
+@media(max-width:768px){
+  #landing{flex-direction:column}
+
+  .flag-panel{
+    width:100%;
+    height:40%;
+  }
+
+  .brand-panel{
+    width:100%;
+    height:60%;
+  }
+
+  .brand h1{
+    font-size:34px;
+    letter-spacing:3px;
+  }
 }
 
 /* ================= MAIN SITE (HIDDEN INITIALLY) ================= */
@@ -122,38 +145,15 @@ header{
   display:flex;justify-content:center;gap:14px;
   margin:100px auto 20px;
   padding:12px 18px;
-  width:fit-content;border-radius:22px;
+  border-radius:22px;
   background:rgba(255,255,255,.75);
   backdrop-filter:blur(14px);
-  box-shadow:0 20px 40px rgba(0,0,0,.25);
-}
-.glass-menu button{
-  padding:10px 18px;
-  background:linear-gradient(145deg,#8A1538,#5e0f2a);
-  color:#fff;border:none;border-radius:16px;
-  font-weight:600;cursor:pointer;
 }
 
 /* SECTIONS */
 section{display:none;padding:32px 16px}
 section.active{display:block}
 .section-inner{max-width:1200px;margin:0 auto;text-align:center}
-
-/* PRODUCTS */
-#productGrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
-}
-.product-card{
-  background:#fff;
-  border-radius:18px;
-  box-shadow:0 14px 28px rgba(0,0,0,.22);
-  overflow:hidden;
-}
-.product-thumb{width:100%;height:220px;object-fit:cover;cursor:pointer}
-.product-info{padding:10px}
-.product-info p{color:var(--maroon);font-weight:700}
 
 /* CART */
 .cart-btn{
@@ -172,17 +172,6 @@ section.active{display:block}
 }
 .cart-drawer.open{right:0}
 
-/* VIDEO MODAL */
-#videoModal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.85);
-  z-index:2000;
-  align-items:center;
-  justify-content:center;
-}
-
 footer{text-align:center;padding:16px;opacity:.6}
 </style>
 </head>
@@ -191,11 +180,16 @@ footer{text-align:center;padding:16px;opacity:.6}
 
 <!-- LANDING -->
 <div id="landing">
-  <div class="flag"></div>
-  <div class="brand">
-    <h1>THE QATARI ABAYA</h1>
-    <p>by Teepee's</p>
-    <button class="shop-btn" onclick="enterSite()">Shop Now</button>
+  <div class="flag-panel">
+    <div class="flag"></div>
+  </div>
+
+  <div class="brand-panel">
+    <div class="brand">
+      <h1>THE QATARI ABAYA</h1>
+      <p>Qatari Elegance Meets Modern Modesty</p>
+      <button class="shop-btn" onclick="enterSite()">Shop Now</button>
+    </div>
   </div>
 </div>
 
@@ -219,35 +213,20 @@ footer{text-align:center;padding:16px;opacity:.6}
   </div>
 </section>
 
-<section id="about"><div class="section-inner"><h2>About Us</h2></div></section>
+<section id="about"><div class="section-inner"><h2>About</h2></div></section>
 <section id="contact"><div class="section-inner"><h2>Contact</h2></div></section>
 <section id="checkout"><div class="section-inner"><h2>Checkout</h2></div></section>
 <section id="admin"><div class="section-inner"><h2>Admin</h2></div></section>
 
 <div class="cart-btn" onclick="toggleCart()">🛒</div>
-
 <div class="cart-drawer" id="cart">
   <div id="cartItems"></div>
   <h3>Total: ₹<span id="cartTotal">0</span></h3>
 </div>
 
-<div id="videoModal" onclick="closeVideo()">
-  <video id="modalVideo" controls playsinline preload="none"></video>
-</div>
-
 <footer>© 2025 The Qatari Abaya by Teepee's</footer>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
 <script>
-firebase.initializeApp({
-  apiKey:"AIzaSyAxJI4LaZu5AQyk4jJ0LTthxCGXQeJBaRQ",
-  authDomain:"qatri-abaya.firebaseapp.com",
-  projectId:"qatri-abaya"
-});
-
 function enterSite(){
   document.getElementById("landing").style.display="none";
   document.body.style.overflow="auto";
