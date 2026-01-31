@@ -34,13 +34,13 @@ body{background:#fff;overflow:hidden}
   height:100%;
   width:72%;
   background:#fff;
+  z-index:1;
   clip-path:polygon(
     0 0,95% 0,100% 6%,95% 12%,100% 18%,95% 24%,100% 30%,
     95% 36%,100% 42%,95% 48%,100% 54%,95% 60%,100% 66%,
     95% 72%,100% 78%,95% 84%,100% 90%,95% 96%,100% 100%,0 100%
   );
   animation:flagIn 2.2s ease forwards;
-  z-index:1;
 }
 
 @keyframes flagIn{
@@ -50,20 +50,17 @@ body{background:#fff;overflow:hidden}
 /* BRAND TEXT */
 .brand{
   position:relative;
+  z-index:2;
   text-align:center;
   color:#fff;
   opacity:0;
   transform:scale(.85);
   animation:brandIn 1.8s ease forwards;
   animation-delay:2.2s;
-  z-index:2;
 }
 
 @keyframes brandIn{
-  to{
-    opacity:1;
-    transform:scale(1);
-  }
+  to{opacity:1;transform:scale(1)}
 }
 
 .brand h1{
@@ -228,11 +225,11 @@ footer{text-align:center;padding:16px;opacity:.6}
 <section id="admin"><div class="section-inner"><h2>Admin</h2></div></section>
 
 <div class="cart-btn" onclick="toggleCart()">🛒</div>
+
 <div class="cart-drawer" id="cart">
   <div id="cartItems"></div>
   <h3>Total: ₹<span id="cartTotal">0</span></h3>
 </div>
-
 
 <div id="videoModal" onclick="closeVideo()">
   <video id="modalVideo" controls playsinline preload="none"></video>
@@ -253,6 +250,7 @@ firebase.initializeApp({
 
 function enterSite(){
   document.getElementById("landing").style.display="none";
+  document.body.style.overflow="auto";
   document.querySelector("header").style.display="flex";
   document.querySelector(".glass-menu").style.display="flex";
   document.querySelector(".cart-btn").style.display="flex";
