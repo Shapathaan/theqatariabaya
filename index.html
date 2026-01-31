@@ -8,129 +8,15 @@
 <style>
 :root{
   --maroon:#8A1538;
-  --gold:#F5E6C8;
-  --white:#ffffff;
   --bg:#f4f4f4;
+  --white:#ffffff;
+  --text:#111;
 }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Segoe UI,sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif}
+body{background:var(--bg);color:var(--text)}
 
-/* ================= LANDING ================= */
-body{
-  background:#fff;
-}
-
-#landing{
-  position:fixed;
-  inset:0;
-  background:linear-gradient(145deg,#8A1538,#5e0f2a);
-  z-index:3000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-
-.skip{
-  position:absolute;
-  top:20px;
-  right:20px;
-  color:rgba(255,255,255,.7);
-  font-size:13px;
-  cursor:pointer;
-  z-index:5;
-}
-
-/* QATARI FLAG SHAPE */
-.flag{
-  position:absolute;
-  left:-35%;
-  top:0;
-  width:60%;
-  height:100%;
-  background:rgba(255,255,255,.10);
-  clip-path:polygon(
-    0 0,90% 0,100% 6%,90% 12%,100% 18%,90% 24%,100% 30%,
-    90% 36%,100% 42%,90% 48%,100% 54%,90% 60%,100% 66%,
-    90% 72%,100% 78%,90% 84%,100% 90%,90% 100%,0 100%
-  );
-  animation:flagSlide 4.5s ease forwards;
-}
-@keyframes flagSlide{
-  to{left:0}
-}
-
-.brand{
-  text-align:center;
-  z-index:2;
-  opacity:0;
-  animation:brandFade 2.4s ease forwards;
-  animation-delay:2.2s;
-}
-@keyframes brandFade{to{opacity:1}}
-
-.brand h1{
-  color:var(--gold);
-  font-size:clamp(38px,7vw,64px);
-  letter-spacing:26px;
-  animation:titleReveal 2.8s ease forwards;
-}
-@keyframes titleReveal{
-  from{opacity:0;transform:translateY(40px)}
-  to{opacity:1;letter-spacing:8px;transform:translateY(0)}
-}
-
-.brand p{
-  margin-top:18px;
-  color:#f1f1f1;
-  font-size:15px;
-  letter-spacing:2px;
-  opacity:0;
-  animation:fadeIn 2s ease forwards;
-  animation-delay:4.8s;
-}
-
-.shop-btn{
-  margin-top:46px;
-  padding:16px 52px;
-  background:transparent;
-  color:var(--gold);
-  border:2px solid var(--gold);
-  border-radius:50px;
-  font-weight:700;
-  letter-spacing:2px;
-  cursor:pointer;
-  opacity:0;
-  animation:fadeIn 2s ease forwards;
-  animation-delay:6.2s;
-  transition:.4s;
-}
-.shop-btn:hover{
-  background:var(--gold);
-  color:#5e0f2a;
-  box-shadow:0 0 30px rgba(245,230,200,.7);
-}
-
-@keyframes fadeIn{to{opacity:1}}
-
-/* ================= MAIN SITE ================= */
-header,
-.glass-menu,
-.cart-btn{
-  display:none;
-}
-
-body.entered header,
-body.entered .glass-menu,
-body.entered .cart-btn{
-  display:flex;
-}
-
+/* ================= HEADER ================= */
 header{
   position:fixed;
   top:0;left:0;right:0;
@@ -145,21 +31,29 @@ header{
 .logo img{height:52px}
 .admin-btn{color:var(--maroon);font-weight:700;cursor:pointer}
 
+/* ================= BANNER ================= */
+.banner{
+  margin-top:72px;
+}
+.banner img{
+  width:100%;
+  max-height:240px;
+  object-fit:cover;
+}
+
+/* ================= MENU ================= */
 .glass-menu{
-  margin-top:90px;
   display:flex;
   justify-content:center;
   gap:14px;
+  margin:18px auto;
   padding:12px 18px;
   width:fit-content;
-  margin-left:auto;
-  margin-right:auto;
   border-radius:22px;
-  background:rgba(255,255,255,.7);
+  background:rgba(255,255,255,.65);
   backdrop-filter:blur(14px);
   box-shadow:0 20px 40px rgba(0,0,0,.25);
 }
-
 .glass-menu button{
   padding:10px 18px;
   background:linear-gradient(145deg,#8A1538,#5e0f2a);
@@ -170,19 +64,19 @@ header{
   cursor:pointer;
 }
 
+/* ================= SECTIONS ================= */
 section{
   display:none;
   padding:32px 16px;
 }
 section.active{display:block}
-
 .section-inner{
   max-width:1200px;
   margin:0 auto;
   text-align:center;
 }
 
-/* PRODUCTS GRID */
+/* ================= PRODUCT GRID ================= */
 #productGrid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -190,20 +84,41 @@ section.active{display:block}
   margin-top:24px;
 }
 
+.product-card{
+  background:#fff;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 14px 28px rgba(0,0,0,.22);
+}
+
+.product-thumb{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  cursor:pointer;
+}
+
+.product-info{
+  padding:10px;
+}
+.product-info h4{margin-bottom:6px}
+.product-info p{color:var(--maroon);font-weight:700}
+
+/* MOBILE FIX */
 @media(max-width:600px){
   #productGrid{
     grid-template-columns:repeat(2,1fr);
     gap:14px;
   }
+  .product-thumb{height:160px}
 }
 
-/* CART */
+/* ================= CART ================= */
 .cart-btn{
   position:fixed;
   bottom:20px;
   right:20px;
-  width:56px;
-  height:56px;
+  width:56px;height:56px;
   background:var(--maroon);
   color:#fff;
   border-radius:50%;
@@ -214,7 +129,6 @@ section.active{display:block}
   cursor:pointer;
   z-index:1000;
 }
-
 .cart-drawer{
   position:fixed;
   top:0;
@@ -228,7 +142,7 @@ section.active{display:block}
 }
 .cart-drawer.open{right:0}
 
-/* VIDEO MODAL */
+/* ================= VIDEO MODAL ================= */
 #videoModal{
   display:none;
   position:fixed;
@@ -239,41 +153,37 @@ section.active{display:block}
   justify-content:center;
 }
 
-footer{
-  text-align:center;
-  padding:16px;
-  opacity:.6;
-}
+footer{text-align:center;padding:16px;opacity:.6}
 </style>
 </head>
 
 <body>
 
-<!-- LANDING -->
-<div id="landing">
-  <div class="skip" onclick="enterSite()">Skip</div>
-  <div class="flag"></div>
-  <div class="brand">
-    <h1>THE QATARI ABAYA</h1>
-    <p>QATARI ELEGANCE MEETS MODERN MODESTY</p>
-    <button class="shop-btn" onclick="enterSite()">SHOP NOW</button>
-  </div>
-</div>
-
-<!-- MAIN SITE -->
 <header>
   <div class="logo"><img src="icon-192.png"></div>
   <div class="admin-btn" onclick="navigate('admin')">Admin</div>
 </header>
 
+<div class="banner">
+  <img src="qatari.png" alt="The Qatari Abaya Banner">
+</div>
+
 <div class="glass-menu">
+  <button onclick="navigate('home')">Home</button>
   <button onclick="navigate('products')">Products</button>
   <button onclick="navigate('about')">About</button>
   <button onclick="navigate('contact')">Contact</button>
   <button onclick="navigate('checkout')">Checkout</button>
 </div>
 
-<section id="products" class="active">
+<section id="home" class="active">
+  <div class="section-inner">
+    <h2>THE QATARI ABAYA</h2>
+    <p>Qatari elegance meets modern modesty</p>
+  </div>
+</section>
+
+<section id="products">
   <div class="section-inner">
     <h2>Our Collection</h2>
     <div id="productGrid"></div>
@@ -282,7 +192,10 @@ footer{
 
 <section id="about">
   <div class="section-inner">
-    <h2>About</h2>
+    <h2>About Us</h2>
+    <p style="max-width:900px;margin:0 auto;line-height:1.8">
+      Qatari Elegance Meets Modern Modesty... (your final text already added earlier)
+    </p>
   </div>
 </section>
 
@@ -296,24 +209,7 @@ footer{
 <section id="checkout">
   <div class="section-inner">
     <h2>Checkout</h2>
-
-    <input id="custName" placeholder="Full Name">
-    <input id="custPhone" placeholder="WhatsApp Number">
-    <textarea id="custAddress" placeholder="Delivery Address" rows="3"></textarea>
-
     <img src="UPI_QR.png" style="width:220px;margin:20px auto;display:block">
-
-    <button onclick="placeOrder()" style="
-      width:100%;
-      padding:14px;
-      background:#8A1538;
-      color:#fff;
-      border:none;
-      border-radius:12px;
-      font-weight:700;
-      cursor:pointer">
-      Pay & Place Order
-    </button>
   </div>
 </section>
 
@@ -340,7 +236,6 @@ footer{
   <h3>Total: ₹<span id="cartTotal">0</span></h3>
 </div>
 
-<!-- VIDEO MODAL -->
 <div id="videoModal" onclick="closeVideo()">
   <video id="modalVideo" controls playsinline preload="none"
     style="width:90%;max-width:420px;background:black"></video>
@@ -348,7 +243,6 @@ footer{
 
 <footer>© 2025 The Qatari Abaya by Teepee's</footer>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -359,19 +253,6 @@ firebase.initializeApp({
   authDomain:"qatri-abaya.firebaseapp.com",
   projectId:"qatri-abaya"
 });
-
-(function(){
-  if(localStorage.getItem("hasSeenLanding")==="true"){
-    enterSite(true);
-  }
-})();
-
-function enterSite(skip){
-  localStorage.setItem("hasSeenLanding","true");
-  document.getElementById("landing").style.display="none";
-  document.body.classList.add("entered");
-  if(!skip) navigate('products');
-}
 </script>
 
 <script src="main.js"></script>
