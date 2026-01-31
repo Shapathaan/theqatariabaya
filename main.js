@@ -41,7 +41,9 @@ function saveCart(){
 
 /* ================= ADD TO CART ================= */
 function addToCart(id, name, price){
-  const size = document.getElementById(`size-${id}`).value;
+  const sizeEl = document.getElementById(`size-${id}`);
+  const size = sizeEl ? sizeEl.value : "";
+
   if(!size){
     alert("Please select a size");
     return;
@@ -67,7 +69,7 @@ function changeQty(index, delta){
   saveCart();
 }
 
-/* ================= REMOVE ITEM ================= */
+/* ================= REMOVE ================= */
 function removeItem(index){
   cart.splice(index,1);
   saveCart();
@@ -76,6 +78,8 @@ function removeItem(index){
 /* ================= CART COUNT ================= */
 function updateCartCount(){
   const badge = document.getElementById("cartCount");
+  if(!badge) return;
+
   const count = cart.reduce((s,i)=>s+i.qty,0);
 
   if(count > 0){
@@ -90,6 +94,8 @@ function updateCartCount(){
 function renderCart(){
   const itemsDiv = document.getElementById("cartItems");
   const emptyMsg = document.getElementById("emptyCartMsg");
+
+  if(!itemsDiv) return;
 
   itemsDiv.innerHTML="";
 
@@ -111,7 +117,7 @@ function renderCart(){
         <small>Size: ${item.size}</small><br>
         ₹${item.price} × ${item.qty}
 
-        <div style="margin-top:6px;display:flex;gap:6px">
+        <div style="margin-top:8px;display:flex;gap:6px">
           <button onclick="changeQty(${i},-1)">−</button>
           <button onclick="changeQty(${i},1)">+</button>
           <button onclick="removeItem(${i})">Remove</button>
@@ -145,9 +151,8 @@ function checkoutWhatsApp(){
   msg += `🕒 ${new Date().toLocaleString()}\n\n`;
   msg += `Please confirm availability`;
 
-  const phone = "9172081816783";
   window.open(
-    `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,
+    `https://wa.me/9172081816783?text=${encodeURIComponent(msg)}`,
     "_blank"
   );
 }
@@ -182,7 +187,19 @@ db.collection("products")
             <option>L</option><option>XL</option><option>XXL</option>
           </select>
 
-          <button onclick="addToCart('${doc.id}','${p.name}',${p.price})">
+          <button
+            style="
+              width:100%;
+              margin-top:8px;
+              padding:10px;
+              background:linear-gradient(145deg,#8A1538,#5e0f2a);
+              color:#fff;
+              border:none;
+              border-radius:12px;
+              font-weight:700;
+              cursor:pointer;
+            "
+            onclick="addToCart('${doc.id}','${p.name}',${p.price})">
             Add to Cart
           </button>
         </div>
