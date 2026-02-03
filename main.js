@@ -128,23 +128,36 @@ function checkoutWhatsApp(){
     return;
   }
 
-  let msg = `🖤 *The Qatari Abaya by Teepee's* 🖤\n\n📦 *New Order*\n\n`;
+  let msg = `🖤 *THE QATARI ABAYA by Teepee's* 🖤\n`;
+  msg += `━━━━━━━━━━━━━━━━━━\n`;
+  msg += `📦 *NEW ORDER REQUEST*\n\n`;
+
   let total = 0;
 
   cart.forEach((item,i)=>{
-    total += item.price * item.qty;
-    msg += `${i+1}. ${item.name}\n`;
-    msg += `Size: ${item.size}\nQty: ${item.qty}\n₹${item.price * item.qty}\n\n`;
+    const lineTotal = item.price * item.qty;
+    total += lineTotal;
+
+    msg += `✨ *${item.name}*\n`;
+    msg += `• Size: ${item.size}\n`;
+    msg += `• Quantity: ${item.qty}\n`;
+    msg += `• Price: ₹${lineTotal}\n\n`;
   });
 
-  msg += `💰 *Total:* ₹${total}\n`;
-  msg += `🕒 ${new Date().toLocaleString()}\n\nPlease confirm availability`;
+  msg += `━━━━━━━━━━━━━━━━━━\n`;
+  msg += `💰 *Order Total:* ₹${total}\n`;
+  msg += `📍 *Delivery Location:* \n`;
+  msg += `📞 *Contact Number:* \n\n`;
+  msg += `🕒 ${new Date().toLocaleString()}\n\n`;
+  msg += `Kindly confirm availability & delivery timeline.\n`;
+  msg += `— Thank you ✨`;
 
   window.open(
     `https://wa.me/9172081816783?text=${encodeURIComponent(msg)}`,
     "_blank"
   );
 }
+
 
 /* ================= LOAD PRODUCTS (SHOP) ================= */
 db.collection("products")
