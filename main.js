@@ -23,10 +23,10 @@ function loginAdmin(e){
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 function toggleCart(){
-  const drawer = document.getElementById("cart");
-  drawer.classList.toggle("open");
+  document.getElementById("cart").classList.toggle("open");
   renderCart();
 }
+
 
 
 function saveCart(){
