@@ -222,26 +222,76 @@ section.active{display:block}
 }
 .cart-drawer.open{right:0}
 
-/* ================= ABOUT (ENHANCED) ================= */
-.about-box{
-  max-width:900px;
+/* ================= ABOUT US – QATARI THEME ================= */
+.about-qatari{
+  max-width:950px;
   margin:0 auto;
-  line-height:1.9;
-  background:#fff;
-  padding:30px;
-  border-radius:18px;
-  box-shadow:0 14px 32px rgba(0,0,0,.15);
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #ffffff 62%,
+      #8A1538 62%,
+      #8A1538 100%
+    );
+  border-radius:22px;
+  padding:40px 36px;
+  box-shadow:0 18px 40px rgba(0,0,0,.18);
+  position:relative;
+  overflow:hidden;
 }
+
+.about-qatari::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:12px;
+  height:100%;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      #ffffff 0 12px,
+      #8A1538 12px 24px
+    );
+}
+
 .about-title{
-  font-size:28px;
-  color:var(--maroon);
-  margin-bottom:16px;
-  letter-spacing:1px;
+  font-size:clamp(26px,4vw,36px);
+  color:#8A1538;
+  letter-spacing:2px;
+  margin-bottom:14px;
+  text-align:left;
 }
+
 .about-divider{
-  margin:18px 0;
-  color:var(--gold);
+  margin:16px 0 24px;
+  color:#F5E6C8;
   letter-spacing:6px;
+  text-align:left;
+}
+
+.about-text{
+  font-size:15.5px;
+  line-height:1.9;
+  margin-bottom:18px;
+  max-width:600px;
+  text-align:left;
+}
+
+.about-highlight{
+  color:#8A1538;
+  font-weight:700;
+}
+
+@media(max-width:700px){
+  .about-qatari{
+    padding:28px 22px;
+    background:#ffffff;
+  }
+  .about-qatari::before{
+    display:none;
+  }
 }
 
 /* ================= VIDEO MODAL ================= */
