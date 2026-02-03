@@ -23,9 +23,11 @@ function loginAdmin(e){
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 function toggleCart(){
-  cart.classList.toggle("open");
+  const drawer = document.getElementById("cart");
+  drawer.classList.toggle("open");
   renderCart();
 }
+
 
 function saveCart(){
   localStorage.setItem("cart",JSON.stringify(cart));
