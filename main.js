@@ -24,6 +24,37 @@ function loginAdmin(e){
     });
 }
 
+function uploadProduct(){
+  const name  = pName.value.trim();
+  const price = Number(pPrice.value);
+  const video = pVideo.value.trim();
+  const badge = pBadge.value;
+
+  if(!name || !price || !video){
+    uploadStatus.innerText = "❌ Fill all fields & upload video";
+    return;
+  }
+
+  db.collection("products").add({
+    name,
+    price,
+    video,
+    badge,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  .then(()=>{
+    uploadStatus.innerText = "✅ Product uploaded";
+    pName.value="";
+    pPrice.value="";
+    pVideo.value="";
+    pBadge.value="";
+  })
+  .catch(err=>{
+    uploadStatus.innerText = "❌ "+err.message;
+  });
+}
+
+
 /* ================= CART STATE ================= */
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -278,3 +309,20 @@ function closeVideo(){
 /* INIT */
 updateCartCount();
 renderCart();
+
+/* ================= CLOUDINARY UPLOAD ================= */
+function openCloudinary(){
+  cloudinary.openUploadWidget({
+    cloudName: "dsdvlwxa4",
+    uploadPreset: "qatari-abaya",
+    sources: ["local","camera"],
+    multiple: false,
+    resourceType: "video",
+    maxFileSize: 20000000
+  }, (error, result) => {
+    if(!error && result && result.event === "success"){
+      document.getElementById("pVideo").value = result.info.secure_url;
+    }
+  });
+}
+
