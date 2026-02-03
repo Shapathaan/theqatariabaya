@@ -186,15 +186,17 @@ section.active{display:block}
 
 .cart-drawer{
   position:fixed;
-  top:0;
+  top:72px;                    /* ✅ HEADER HEIGHT */
   right:-100%;
   width:320px;
-  height:100%;
+  height:calc(100% - 72px);    /* ✅ NO OVERLAP */
   background:#fff;
   padding:16px;
   transition:.3s;
   z-index:2000;
+  overflow-y:auto;             /* ✅ long carts safe */
 }
+
 .cart-drawer.open{right:0}
 
 /* ===== VIDEO ===== */
