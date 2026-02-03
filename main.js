@@ -50,18 +50,78 @@ function updateCartCount(){
 }
 
 function renderCart(){
-  cartItems.innerHTML="";
-  emptyCartMsg.style.display=cart.length?"none":"block";
-  cart.forEach((i,x)=>{
-    cartItems.innerHTML+=`
-      <div>
-        <b>${i.name}</b> (${i.size})<br>
-        ₹${i.price} × ${i.qty}
-        <button onclick="cart[x].qty--;saveCart()">−</button>
-        <button onclick="cart[x].qty++;saveCart()">+</button>
-      </div>`;
+  const itemsDiv = document.getElementById("cartItems");
+  const emptyMsg = document.getElementById("emptyCartMsg");
+
+  if(!itemsDiv) return;
+
+  itemsDiv.innerHTML = "";
+
+  if(cart.length === 0){
+    emptyMsg.style.display = "block";
+    return;
+  }
+
+  emptyMsg.style.display = "none";
+
+  let total = 0;
+
+  cart.forEach((item, i)=>{
+    const itemTotal = item.price * item.qty;
+    total += itemTotal;
+
+    itemsDiv.innerHTML += `
+      <div style="
+        border-bottom:1px solid #eee;
+        padding:12px 0;
+        display:flex;
+        flex-direction:column;
+        gap:6px;
+      ">
+        <div style="font-weight:700">${item.name}</div>
+
+        <div style="font-size:13px;opacity:.7">
+          Size: ${item.size}
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-weight:600">₹${itemTotal}</div>
+
+          <div style="display:flex;gap:8px;align-items:center">
+            <button onclick="changeQty(${i},-1)"
+              style="width:28px;height:28px;border:none;border-radius:50%;
+              background:#ddd;cursor:pointer">−</button>
+
+            <span style="min-width:20px;text-align:center">${item.qty}</span>
+
+            <button onclick="changeQty(${i},1)"
+              style="width:28px;height:28px;border:none;border-radius:50%;
+              background:#ddd;cursor:pointer">+</button>
+
+            <button onclick="removeItem(${i})"
+              style="border:none;background:none;color:#8A1538;
+              font-weight:700;cursor:pointer">✕</button>
+          </div>
+        </div>
+      </div>
+    `;
   });
+
+  itemsDiv.innerHTML += `
+    <div style="
+      margin-top:14px;
+      padding-top:12px;
+      border-top:2px solid #8A1538;
+      font-weight:700;
+      display:flex;
+      justify-content:space-between;
+    ">
+      <span>Total</span>
+      <span>₹${total}</span>
+    </div>
+  `;
 }
+
 
 function checkoutWhatsApp(){
   if(!cart.length) return alert("Cart empty");
