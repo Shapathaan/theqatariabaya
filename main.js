@@ -52,60 +52,80 @@ function updateCartCount(){
 function renderCart(){
   const itemsDiv = document.getElementById("cartItems");
   const emptyMsg = document.getElementById("emptyCartMsg");
-
-  if(!itemsDiv) return;
+  const footer   = document.getElementById("cartFooter");
+  const totalEl  = document.getElementById("cartTotal");
 
   itemsDiv.innerHTML = "";
 
   if(cart.length === 0){
     emptyMsg.style.display = "block";
+    footer.style.display = "none";
+    updateCartCount();
     return;
   }
 
   emptyMsg.style.display = "none";
+  footer.style.display = "block";
 
   let total = 0;
 
-  cart.forEach((item, i)=>{
-    const itemTotal = item.price * item.qty;
-    total += itemTotal;
+  cart.forEach((item, index)=>{
+    const line = item.price * item.qty;
+    total += line;
 
     itemsDiv.innerHTML += `
-      <div style="
-        border-bottom:1px solid #eee;
-        padding:12px 0;
-        display:flex;
-        flex-direction:column;
-        gap:6px;
-      ">
-        <div style="font-weight:700">${item.name}</div>
+      <div class="cart-row"
+        data-index="${index}"
+        style="
+          border-bottom:1px solid #eee;
+          padding:12px 0;
+          display:flex;
+          flex-direction:column;
+          gap:6px">
 
-        <div style="font-size:13px;opacity:.7">
-          Size: ${item.size}
-        </div>
+        <strong>${item.name}</strong>
+        <small>Size: ${item.size}</small>
 
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <div style="font-weight:600">₹${itemTotal}</div>
+          <span>₹${line}</span>
 
           <div style="display:flex;gap:8px;align-items:center">
-            <button onclick="changeQty(${i},-1)"
-              style="width:28px;height:28px;border:none;border-radius:50%;
-              background:#ddd;cursor:pointer">−</button>
-
-            <span style="min-width:20px;text-align:center">${item.qty}</span>
-
-            <button onclick="changeQty(${i},1)"
-              style="width:28px;height:28px;border:none;border-radius:50%;
-              background:#ddd;cursor:pointer">+</button>
-
-            <button onclick="removeItem(${i})"
-              style="border:none;background:none;color:#8A1538;
-              font-weight:700;cursor:pointer">✕</button>
+            <button data-action="dec">−</button>
+            <span>${item.qty}</span>
+            <button data-action="inc">+</button>
+            <button data-action="remove">✕</button>
           </div>
         </div>
       </div>
     `;
   });
+
+  totalEl.innerText = `₹${total}`;
+  updateCartCount();
+}
+
+document.getElementById("cartItems").addEventListener("click", function(e){
+  const btn = e.target;
+  if(!btn.dataset.action) return;
+
+  const row = btn.closest(".cart-row");
+  const index = Number(row.dataset.index);
+
+  if(btn.dataset.action === "inc"){
+    cart[index].qty++;
+  }
+
+  if(btn.dataset.action === "dec"){
+    cart[index].qty--;
+    if(cart[index].qty <= 0) cart.splice(index,1);
+  }
+
+  if(btn.dataset.action === "remove"){
+    cart.splice(index,1);
+  }
+
+  saveCart();
+});
 
   itemsDiv.innerHTML += `
     <div style="
@@ -124,13 +144,47 @@ function renderCart(){
 
 
 function checkoutWhatsApp(){
-  if(!cart.length) return alert("Cart empty");
-  let msg="🖤 *THE QATARI ABAYA* 🖤\n\n";
-  cart.forEach(i=>{
-    msg+=`${i.name} (${i.size}) x${i.qty} = ₹${i.price*i.qty}\n`;
+  if(cart.length === 0){
+    alert("Cart is empty");
+    return;
+  }
+
+  const name = deliveryName.value.trim();
+  const phone = deliveryPhone.value.trim();
+  const address = deliveryAddress.value.trim();
+
+  if(!name || !phone || !address){
+    alert("Please fill delivery details");
+    return;
+  }
+
+  let msg = `🖤 *THE QATARI ABAYA by Teepee's*\n`;
+  msg += `━━━━━━━━━━━━━━\n`;
+  msg += `📦 *New Order*\n\n`;
+
+  let total = 0;
+
+  cart.forEach((i,n)=>{
+    const t = i.price * i.qty;
+    total += t;
+    msg += `${n+1}. ${i.name}\n`;
+    msg += `Size: ${i.size} | Qty: ${i.qty}\n`;
+    msg += `₹${t}\n\n`;
   });
-  window.open(`https://wa.me/9172081816783?text=${encodeURIComponent(msg)}`);
+
+  msg += `━━━━━━━━━━━━━━\n`;
+  msg += `💰 Total: ₹${total}\n\n`;
+  msg += `👤 Name: ${name}\n`;
+  msg += `📞 Phone: ${phone}\n`;
+  msg += `📍 Address: ${address}\n\n`;
+  msg += `Please confirm availability 🙏`;
+
+  window.open(
+    `https://wa.me/9172081816783?text=${encodeURIComponent(msg)}`,
+    "_blank"
+  );
 }
+
 
 /* PRODUCTS */
 db.collection("products").orderBy("createdAt","desc").onSnapshot(s=>{
