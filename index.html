@@ -12,75 +12,12 @@
   --bg:#f4f4f4;
   --text:#111;
 }
+*{margin:0;padding:0;box-sizing:border-box;font-family:Georgia,serif}
+body{background:var(--bg);color:var(--text)}
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:"Georgia","Times New Roman",serif;
-}
-
-body{
-  background:var(--bg);
-  color:var(--text);
-}
-
-/* ================= LANDING ================= */
-#landing{
-  position:fixed;
-  inset:0;
-  z-index:5000;
-  background:black;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-#landing video{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-.landing-overlay{
-  position:relative;
-  z-index:2;
-  text-align:center;
-}
-.landing-overlay h1{
-  color:var(--gold);
-  font-size:clamp(32px,6vw,60px);
-  letter-spacing:14px;
-  opacity:0;
-  animation:reveal 2.6s forwards;
-}
-.landing-overlay p{
-  color:#eee;
-  margin-top:16px;
-  opacity:0;
-  animation:fade 2s 2.6s forwards;
-}
-.landing-overlay button{
-  margin-top:40px;
-  padding:14px 50px;
-  border:2px solid var(--gold);
-  background:transparent;
-  color:var(--gold);
-  border-radius:50px;
-  cursor:pointer;
-  opacity:0;
-  animation:fade 2s 4.2s forwards;
-}
-@keyframes reveal{
-  from{opacity:0;transform:translateY(40px)}
-  to{opacity:1;transform:translateY(0)}
-}
-@keyframes fade{to{opacity:1}}
-
-/* ================= HEADER ================= */
+/* HEADER */
 header{
-  position:fixed;
-  top:0;left:0;right:0;
+  position:fixed;top:0;left:0;right:0;
   height:72px;
   background:#fff;
   border-bottom:3px solid var(--maroon);
@@ -93,48 +30,29 @@ header{
 .logo img{height:52px}
 .admin-btn{color:var(--maroon);font-weight:700;cursor:pointer}
 
-/* ================= BANNER ================= */
-.banner{
-  margin-top:72px;
-  display:none;
-}
-.banner img{
-  width:100%;
-  max-height:240px;
-  object-fit:cover;
-}
-
-/* ================= MENU ================= */
+/* MENU */
 .glass-menu{
   display:none;
+  margin-top:90px;
   justify-content:center;
   gap:14px;
-  margin:18px auto;
-  padding:12px 18px;
-  border-radius:22px;
-  background:rgba(255,255,255,.7);
-  backdrop-filter:blur(14px);
 }
 .glass-menu button{
   padding:10px 18px;
   background:linear-gradient(145deg,#8A1538,#5e0f2a);
-  color:#fff;
-  border:none;
-  border-radius:16px;
-  cursor:pointer;
+  color:#fff;border:none;border-radius:16px;cursor:pointer;
 }
 
-/* ================= SECTIONS ================= */
+/* SECTIONS */
 section{display:none;padding:32px 16px}
 section.active{display:block}
 .section-inner{max-width:1200px;margin:auto;text-align:center}
 
-/* ================= PRODUCTS ================= */
+/* PRODUCTS */
 #productGrid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:18px;
-  margin-top:24px;
 }
 .product-card{
   background:#fff;
@@ -149,72 +67,27 @@ section.active{display:block}
   cursor:pointer;
 }
 .product-info{padding:10px}
-.product-info h4{font-size:15px}
 .product-info p{color:var(--maroon);font-weight:700}
 
 @media(max-width:1000px){#productGrid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){#productGrid{grid-template-columns:repeat(2,1fr)}}
 
-/* ================= ABOUT US (PREMIUM) ================= */
-.about-wrap{
-  max-width:900px;
-  margin:auto;
-  text-align:center;
-}
-.about-title{
-  font-size:36px;
-  color:var(--maroon);
-  letter-spacing:2px;
-}
-.about-divider{
-  margin:18px 0;
-  color:var(--gold);
-  letter-spacing:6px;
-}
-.about-text{
-  font-size:16px;
-  line-height:1.9;
-  margin-bottom:18px;
-}
-.insta-badge{
-  display:inline-block;
-  margin-top:24px;
-  padding:12px 28px;
-  border-radius:40px;
-  background:linear-gradient(135deg,#8A1538,#C9A24D);
-  color:#fff;
-  text-decoration:none;
-  font-weight:700;
-}
-
-/* ================= CART ================= */
+/* CART */
 .cart-btn{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  width:56px;
-  height:56px;
-  background:var(--maroon);
-  color:#fff;
+  position:fixed;bottom:20px;right:20px;
+  width:56px;height:56px;
+  background:var(--maroon);color:#fff;
   border-radius:50%;
   display:none;
-  justify-content:center;
-  align-items:center;
-  font-size:24px;
-  cursor:pointer;
+  align-items:center;justify-content:center;
+  font-size:24px;cursor:pointer;
   z-index:3000;
 }
 .cart-btn span{
-  position:absolute;
-  top:-6px;
-  right:-6px;
-  background:#e0002a;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  display:none;
-  justify-content:center;
-  align-items:center;
+  position:absolute;top:-6px;right:-6px;
+  background:red;width:20px;height:20px;
+  border-radius:50%;display:none;
+  align-items:center;justify-content:center;
   font-size:12px;
 }
 
@@ -231,14 +104,20 @@ section.active{display:block}
   overflow-y:auto;
 }
 .cart-drawer.open{right:0}
-
 .cart-header{
-  display:flex;
-  justify-content:space-between;
+  display:flex;justify-content:space-between;
+  border-bottom:1px solid #ddd;padding-bottom:10px;
+}
+
+/* VIDEO MODAL — FIXED */
+#videoModal{
+  display:none;              /* ✅ VERY IMPORTANT */
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  z-index:4000;
+  justify-content:center;
   align-items:center;
-  border-bottom:1px solid #ddd;
-  padding-bottom:10px;
-  margin-bottom:10px;
 }
 
 footer{text-align:center;padding:16px;opacity:.6}
@@ -247,26 +126,14 @@ footer{text-align:center;padding:16px;opacity:.6}
 
 <body>
 
-<!-- LANDING -->
-<div id="landing">
-  <video src="qatar-flag.mp4" autoplay muted loop playsinline></video>
-  <div class="landing-overlay">
-    <h1>THE QATARI ABAYA</h1>
-    <p>Qatari Elegance • Modern Modesty</p>
-    <button onclick="enterSite()">SHOP NOW</button>
-  </div>
-</div>
-
 <header>
   <div class="logo"><img src="icon-192.png"></div>
   <div class="admin-btn" onclick="navigate('admin')">Admin</div>
 </header>
 
-<div class="banner"><img src="qatari.png"></div>
-
 <div class="glass-menu">
   <button onclick="navigate('products')">Products</button>
-  <button onclick="navigate('about')">About Us</button>
+  <button onclick="navigate('about')">About</button>
   <button onclick="navigate('contact')">Contact</button>
   <button onclick="toggleCart()">Cart</button>
 </div>
@@ -279,29 +146,11 @@ footer{text-align:center;padding:16px;opacity:.6}
 </section>
 
 <section id="about">
-  <div class="section-inner about-wrap">
-    <h2 class="about-title">Qatari Elegance Meets Modern Modesty</h2>
-    <div class="about-divider">✦ ✦ ✦</div>
-
-    <p class="about-text">
-      At <b>The Qatari Abaya by Teepee's</b>, we redefine timeless tradition with
-      contemporary grace. Inspired by the rich heritage of Qatar, our abayas
-      embody modesty, sophistication, and quiet power.
+  <div class="section-inner">
+    <h2>Qatari Elegance Meets Modern Modesty</h2>
+    <p style="max-width:900px;margin:auto;line-height:1.9">
+      Luxury Qatari-inspired abayas crafted for power, grace, and identity.
     </p>
-
-    <p class="about-text">
-      Founded in 2025 in Mumbai, India, the TeePee Family blends premium fabrics,
-      Qatari-inspired embroidery, and modern silhouettes for women who command
-      presence with elegance.
-    </p>
-
-    <p class="about-text">
-      This is not fashion. This is identity.
-    </p>
-
-    <a class="insta-badge" href="https://instagram.com/theqatariabaya" target="_blank">
-      Follow on Instagram
-    </a>
   </div>
 </section>
 
@@ -318,40 +167,22 @@ footer{text-align:center;padding:16px;opacity:.6}
 <div class="cart-drawer" id="cart">
   <div class="cart-header">
     <h3>Your Cart</h3>
-    <span onclick="toggleCart()" style="cursor:pointer;font-size:20px">✕</span>
+    <span onclick="toggleCart()" style="cursor:pointer">✕</span>
   </div>
   <div id="cartItems"></div>
   <p id="emptyCartMsg">Your cart is empty</p>
   <button onclick="checkoutWhatsApp()">Checkout via WhatsApp</button>
 </div>
 
+<!-- VIDEO MODAL -->
 <div id="videoModal" onclick="closeVideo()">
   <video id="modalVideo" controls style="width:90%;max-width:420px"></video>
 </div>
 
 <footer>© 2025 The Qatari Abaya by Teepee's</footer>
 
-<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<script>
-firebase.initializeApp({
-  apiKey:"AIzaSyAxJI4LaZu5AQyk4jJ0LTthxCGXQeJBaRQ",
-  authDomain:"qatri-abaya.firebaseapp.com",
-  projectId:"qatri-abaya"
-});
-
-function enterSite(){
-  landing.style.display="none";
-  document.querySelector("header").style.display="flex";
-  document.querySelector(".banner").style.display="block";
-  document.querySelector(".glass-menu").style.display="flex";
-  document.querySelector(".cart-btn").style.display="flex";
-}
-</script>
-
 <script src="main.js"></script>
 </body>
 </html>
