@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Track Order</h2>
+<input id="oid" placeholder="Order ID">
+<button onclick="track()">Track</button>
+<p id="status"></p>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyAxJI4LaZu5AQyk4jJ0LTthxCGXQeJBaRQ",
+  projectId:"qatri-abaya"
+});
+const db=firebase.firestore();
+
+function track(){
+  db.collection("orders").doc(oid.value).get().then(d=>{
+    status.innerText = d.exists ? d.data().status : "Order not found";
+  });
+}
+</script>
+</body>
+</html>
