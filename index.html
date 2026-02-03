@@ -8,57 +8,64 @@
 <style>
 :root{
   --maroon:#8A1538;
-  --gold:#C9A24D;
+  --gold:#F5E6C8;
   --bg:#f4f4f4;
   --text:#111;
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:Georgia,serif}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Georgia","Times New Roman",serif}
 body{background:var(--bg);color:var(--text)}
 
-/* HEADER */
+/* ===== HEADER ===== */
 header{
-  position:fixed;top:0;left:0;right:0;
+  position:fixed;
+  top:0;left:0;right:0;
   height:72px;
   background:#fff;
   border-bottom:3px solid var(--maroon);
-  padding:10px 16px;
-  display:none;
-  justify-content:space-between;
+  display:flex;
   align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
   z-index:3000;
 }
-.logo img{height:52px}
-.admin-btn{color:var(--maroon);font-weight:700;cursor:pointer}
+.logo img{height:50px}
+.admin-btn{font-weight:700;color:var(--maroon);cursor:pointer}
 
-/* MENU */
+/* ===== MENU ===== */
 .glass-menu{
-  display:none;
-  margin-top:90px;
+  margin-top:88px;
+  display:flex;
   justify-content:center;
   gap:14px;
 }
 .glass-menu button{
   padding:10px 18px;
+  border:none;
+  border-radius:16px;
   background:linear-gradient(145deg,#8A1538,#5e0f2a);
-  color:#fff;border:none;border-radius:16px;cursor:pointer;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
 }
 
-/* SECTIONS */
+/* ===== SECTIONS ===== */
 section{display:none;padding:32px 16px}
 section.active{display:block}
 .section-inner{max-width:1200px;margin:auto;text-align:center}
 
-/* PRODUCTS */
+/* ===== PRODUCTS ===== */
 #productGrid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:18px;
+  margin-top:24px;
 }
 .product-card{
   background:#fff;
   border-radius:16px;
-  box-shadow:0 12px 24px rgba(0,0,0,.18);
   overflow:hidden;
+  box-shadow:0 12px 24px rgba(0,0,0,.18);
 }
 .product-thumb{
   width:100%;
@@ -67,30 +74,55 @@ section.active{display:block}
   cursor:pointer;
 }
 .product-info{padding:10px}
+.product-info h4{font-size:15px}
 .product-info p{color:var(--maroon);font-weight:700}
+.product-info select,
+.product-info button{
+  width:100%;
+  margin-top:8px;
+  padding:10px;
+  border-radius:12px;
+}
+.product-info button{
+  background:linear-gradient(145deg,#8A1538,#5e0f2a);
+  border:none;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
 
 @media(max-width:1000px){#productGrid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){#productGrid{grid-template-columns:repeat(2,1fr)}}
 
-/* CART */
+/* ===== CART BUTTON ===== */
 .cart-btn{
-  position:fixed;bottom:20px;right:20px;
+  position:fixed;
+  bottom:20px;
+  right:20px;
   width:56px;height:56px;
-  background:var(--maroon);color:#fff;
   border-radius:50%;
-  display:none;
-  align-items:center;justify-content:center;
-  font-size:24px;cursor:pointer;
+  background:var(--maroon);
+  color:#fff;
+  font-size:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
   z-index:3000;
 }
 .cart-btn span{
-  position:absolute;top:-6px;right:-6px;
-  background:red;width:20px;height:20px;
-  border-radius:50%;display:none;
-  align-items:center;justify-content:center;
+  position:absolute;
+  top:-6px;right:-6px;
+  width:20px;height:20px;
+  border-radius:50%;
+  background:#e0002a;
   font-size:12px;
+  display:none;
+  align-items:center;
+  justify-content:center;
 }
 
+/* ===== CART DRAWER ===== */
 .cart-drawer{
   position:fixed;
   top:72px;
@@ -104,20 +136,16 @@ section.active{display:block}
   overflow-y:auto;
 }
 .cart-drawer.open{right:0}
-.cart-header{
-  display:flex;justify-content:space-between;
-  border-bottom:1px solid #ddd;padding-bottom:10px;
-}
 
-/* VIDEO MODAL — FIXED */
+/* ===== VIDEO MODAL ===== */
 #videoModal{
-  display:none;              /* ✅ VERY IMPORTANT */
+  display:none;
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.85);
   z-index:4000;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
 }
 
 footer{text-align:center;padding:16px;opacity:.6}
@@ -149,7 +177,8 @@ footer{text-align:center;padding:16px;opacity:.6}
   <div class="section-inner">
     <h2>Qatari Elegance Meets Modern Modesty</h2>
     <p style="max-width:900px;margin:auto;line-height:1.9">
-      Luxury Qatari-inspired abayas crafted for power, grace, and identity.
+      The Qatari Abaya by Teepee's blends tradition with modern grace,
+      crafted for women who value modesty, strength and elegance.
     </p>
   </div>
 </section>
@@ -161,28 +190,58 @@ footer{text-align:center;padding:16px;opacity:.6}
   </div>
 </section>
 
-<!-- CART -->
-<div class="cart-btn" onclick="toggleCart()">🛒 <span id="cartCount">0</span></div>
+<section id="admin">
+  <div class="section-inner" style="max-width:420px">
+    <h2>Admin Panel</h2>
+    <form onsubmit="loginAdmin(event)">
+      <input id="adminEmail" placeholder="Email" required>
+      <input id="adminPassword" type="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <p id="loginStatus"></p>
+
+    <div id="adminPanel" style="display:none">
+      <h3>Add / Edit Product</h3>
+      <input id="pName" placeholder="Name">
+      <input id="pPrice" type="number" placeholder="Price">
+      <input id="pVideo" placeholder="Video URL" readonly>
+      <button onclick="openCloudinary()">Upload Video</button>
+      <button onclick="uploadProduct()">Save</button>
+      <p id="uploadStatus"></p>
+    </div>
+  </div>
+</section>
+
+<div class="cart-btn" onclick="toggleCart()">🛒<span id="cartCount">0</span></div>
 
 <div class="cart-drawer" id="cart">
-  <div class="cart-header">
+  <div style="display:flex;justify-content:space-between">
     <h3>Your Cart</h3>
-    <span onclick="toggleCart()" style="cursor:pointer">✕</span>
+    <strong style="cursor:pointer" onclick="toggleCart()">✕</strong>
   </div>
   <div id="cartItems"></div>
   <p id="emptyCartMsg">Your cart is empty</p>
-  <button onclick="checkoutWhatsApp()">Checkout via WhatsApp</button>
 </div>
 
-<!-- VIDEO MODAL -->
 <div id="videoModal" onclick="closeVideo()">
   <video id="modalVideo" controls style="width:90%;max-width:420px"></video>
 </div>
 
 <footer>© 2025 The Qatari Abaya by Teepee's</footer>
 
+<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyAxJI4LaZu5AQyk4jJ0LTthxCGXQeJBaRQ",
+  authDomain:"qatri-abaya.firebaseapp.com",
+  projectId:"qatri-abaya"
+});
+</script>
+
 <script src="main.js"></script>
 </body>
 </html>
