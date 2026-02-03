@@ -294,11 +294,21 @@ footer{text-align:center;padding:16px;opacity:.6}
 
 <div class="cart-btn" onclick="toggleCart()">🛒 <span id="cartCount">0</span></div>
 
-<div class="cart-drawer" id="cart">
-  <div style="display:flex;justify-content:space-between">
-    <h3>Your Cart</h3>
-    <span onclick="toggleCart()">✕</span>
-  </div>
+<div style="
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+  padding-bottom:10px;
+  border-bottom:1px solid #ddd
+">
+  <h3 style="margin:0">Your Cart</h3>
+  <span onclick="toggleCart()"
+        style="cursor:pointer;font-size:20px;font-weight:700">
+    ✕
+  </span>
+</div>
+
   <div id="cartItems"></div>
   <p id="emptyCartMsg">Your cart is empty</p>
   <button onclick="checkoutWhatsApp()">Checkout via WhatsApp</button>
