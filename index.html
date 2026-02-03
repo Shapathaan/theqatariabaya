@@ -8,7 +8,7 @@
 <style>
 :root{
   --maroon:#8A1538;
-  --gold:#F5E6C8;
+  --gold:#C9A24D;
   --bg:#f4f4f4;
   --text:#111;
 }
@@ -25,7 +25,7 @@ body{
   color:var(--text);
 }
 
-/* ===== LANDING ===== */
+/* ================= LANDING ================= */
 #landing{
   position:fixed;
   inset:0;
@@ -50,7 +50,7 @@ body{
 .landing-overlay h1{
   color:var(--gold);
   font-size:clamp(32px,6vw,60px);
-  letter-spacing:12px;
+  letter-spacing:14px;
   opacity:0;
   animation:reveal 2.6s forwards;
 }
@@ -77,24 +77,23 @@ body{
 }
 @keyframes fade{to{opacity:1}}
 
-/* ===== HEADER ===== */
+/* ================= HEADER ================= */
 header{
   position:fixed;
   top:0;left:0;right:0;
-  height:72px;                 /* ✅ FIXED HEIGHT */
+  height:72px;
   background:#fff;
   border-bottom:3px solid var(--maroon);
   padding:10px 16px;
   display:none;
   justify-content:space-between;
   align-items:center;
-  z-index:3000;                /* header stays above */
+  z-index:3000;
 }
-
 .logo img{height:52px}
 .admin-btn{color:var(--maroon);font-weight:700;cursor:pointer}
 
-/* ===== BANNER ===== */
+/* ================= BANNER ================= */
 .banner{
   margin-top:72px;
   display:none;
@@ -105,7 +104,7 @@ header{
   object-fit:cover;
 }
 
-/* ===== MENU ===== */
+/* ================= MENU ================= */
 .glass-menu{
   display:none;
   justify-content:center;
@@ -113,7 +112,7 @@ header{
   margin:18px auto;
   padding:12px 18px;
   border-radius:22px;
-  background:rgba(255,255,255,.65);
+  background:rgba(255,255,255,.7);
   backdrop-filter:blur(14px);
 }
 .glass-menu button{
@@ -125,16 +124,17 @@ header{
   cursor:pointer;
 }
 
-/* ===== SECTIONS ===== */
+/* ================= SECTIONS ================= */
 section{display:none;padding:32px 16px}
 section.active{display:block}
 .section-inner{max-width:1200px;margin:auto;text-align:center}
 
-/* ===== PRODUCTS ===== */
+/* ================= PRODUCTS ================= */
 #productGrid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:18px;
+  margin-top:24px;
 }
 .product-card{
   background:#fff;
@@ -151,10 +151,43 @@ section.active{display:block}
 .product-info{padding:10px}
 .product-info h4{font-size:15px}
 .product-info p{color:var(--maroon);font-weight:700}
+
 @media(max-width:1000px){#productGrid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){#productGrid{grid-template-columns:repeat(2,1fr)}}
 
-/* ===== CART ===== */
+/* ================= ABOUT US (PREMIUM) ================= */
+.about-wrap{
+  max-width:900px;
+  margin:auto;
+  text-align:center;
+}
+.about-title{
+  font-size:36px;
+  color:var(--maroon);
+  letter-spacing:2px;
+}
+.about-divider{
+  margin:18px 0;
+  color:var(--gold);
+  letter-spacing:6px;
+}
+.about-text{
+  font-size:16px;
+  line-height:1.9;
+  margin-bottom:18px;
+}
+.insta-badge{
+  display:inline-block;
+  margin-top:24px;
+  padding:12px 28px;
+  border-radius:40px;
+  background:linear-gradient(135deg,#8A1538,#C9A24D);
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+}
+
+/* ================= CART ================= */
 .cart-btn{
   position:fixed;
   bottom:20px;
@@ -169,6 +202,7 @@ section.active{display:block}
   align-items:center;
   font-size:24px;
   cursor:pointer;
+  z-index:3000;
 }
 .cart-btn span{
   position:absolute;
@@ -186,29 +220,27 @@ section.active{display:block}
 
 .cart-drawer{
   position:fixed;
-  top:72px;                    /* ✅ HEADER HEIGHT */
+  top:72px;
   right:-100%;
   width:320px;
-  height:calc(100% - 72px);    /* ✅ NO OVERLAP */
+  height:calc(100% - 72px);
   background:#fff;
   padding:16px;
   transition:.3s;
-  z-index:2000;
-  overflow-y:auto;             /* ✅ long carts safe */
+  z-index:2500;
+  overflow-y:auto;
 }
-
 .cart-drawer.open{right:0}
 
-/* ===== VIDEO ===== */
-#videoModal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.85);
-  z-index:3000;
-  justify-content:center;
+.cart-header{
+  display:flex;
+  justify-content:space-between;
   align-items:center;
+  border-bottom:1px solid #ddd;
+  padding-bottom:10px;
+  margin-bottom:10px;
 }
+
 footer{text-align:center;padding:16px;opacity:.6}
 </style>
 </head>
@@ -234,7 +266,7 @@ footer{text-align:center;padding:16px;opacity:.6}
 
 <div class="glass-menu">
   <button onclick="navigate('products')">Products</button>
-  <button onclick="navigate('about')">About</button>
+  <button onclick="navigate('about')">About Us</button>
   <button onclick="navigate('contact')">Contact</button>
   <button onclick="toggleCart()">Cart</button>
 </div>
@@ -247,68 +279,47 @@ footer{text-align:center;padding:16px;opacity:.6}
 </section>
 
 <section id="about">
-  <div class="section-inner">
-    <h2>Qatari Elegance Meets Modern Modesty</h2>
-    <p style="max-width:900px;margin:auto;line-height:1.9">
-      At <b>The Qatari Abaya by Teepee's</b>, we blend tradition with modern grace.
-      Crafted for women who value modesty, strength and elegance.
+  <div class="section-inner about-wrap">
+    <h2 class="about-title">Qatari Elegance Meets Modern Modesty</h2>
+    <div class="about-divider">✦ ✦ ✦</div>
+
+    <p class="about-text">
+      At <b>The Qatari Abaya by Teepee's</b>, we redefine timeless tradition with
+      contemporary grace. Inspired by the rich heritage of Qatar, our abayas
+      embody modesty, sophistication, and quiet power.
     </p>
+
+    <p class="about-text">
+      Founded in 2025 in Mumbai, India, the TeePee Family blends premium fabrics,
+      Qatari-inspired embroidery, and modern silhouettes for women who command
+      presence with elegance.
+    </p>
+
+    <p class="about-text">
+      This is not fashion. This is identity.
+    </p>
+
+    <a class="insta-badge" href="https://instagram.com/theqatariabaya" target="_blank">
+      Follow on Instagram
+    </a>
   </div>
 </section>
 
 <section id="contact">
   <div class="section-inner">
     <h2>Contact</h2>
-    <p>WhatsApp: +91-87591345556</p>
+    <p>WhatsApp: +91 72081816783</p>
   </div>
 </section>
 
-<section id="admin">
-  <div class="section-inner" style="max-width:420px">
-    <h2>Admin Panel</h2>
-
-    <form onsubmit="loginAdmin(event)">
-      <input id="adminEmail" placeholder="Email" required>
-      <input id="adminPassword" type="password" placeholder="Password" required>
-      <button type="submit">Login</button>
-    </form>
-
-    <p id="loginStatus"></p>
-
-    <div id="adminPanel" style="display:none">
-      <h3>Add / Edit Product</h3>
-      <input id="pName" placeholder="Name">
-      <input id="pPrice" type="number" placeholder="Price">
-      <input id="pVideo" placeholder="Video URL" readonly>
-      <button onclick="openCloudinary()">Upload Video</button>
-      <select id="pBadge">
-        <option value="">No Badge</option>
-        <option value="NEW">NEW</option>
-        <option value="BESTSELLER">BESTSELLER</option>
-      </select>
-      <button onclick="uploadProduct()">Save Product</button>
-      <p id="uploadStatus"></p>
-    </div>
-  </div>
-</section>
-
+<!-- CART -->
 <div class="cart-btn" onclick="toggleCart()">🛒 <span id="cartCount">0</span></div>
 
-<div style="
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:12px;
-  padding-bottom:10px;
-  border-bottom:1px solid #ddd
-">
-  <h3 style="margin:0">Your Cart</h3>
-  <span onclick="toggleCart()"
-        style="cursor:pointer;font-size:20px;font-weight:700">
-    ✕
-  </span>
-</div>
-
+<div class="cart-drawer" id="cart">
+  <div class="cart-header">
+    <h3>Your Cart</h3>
+    <span onclick="toggleCart()" style="cursor:pointer;font-size:20px">✕</span>
+  </div>
   <div id="cartItems"></div>
   <p id="emptyCartMsg">Your cart is empty</p>
   <button onclick="checkoutWhatsApp()">Checkout via WhatsApp</button>
