@@ -208,19 +208,46 @@ section.active{display:block}
 }
 
 /* ⬇️ THIS IS THE ONLY CART FIX */
+/* ===== CART UI POLISH ===== */
 .cart-drawer{
-  position:fixed;
-  top:72px;
-  right:-100%;
-  width:320px;
+  top:72px; /* header height */
   height:calc(100% - 72px);
-  background:#fff;
-  padding:16px;
-  transition:.3s;
-  z-index:1500;
   overflow-y:auto;
 }
-.cart-drawer.open{right:0}
+
+.cart-drawer h3{
+  margin:0;
+  padding-bottom:10px;
+}
+
+.cart-drawer .close-cart{
+  font-size:20px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.cart-row{
+  border-bottom:1px solid #eee;
+  padding:12px 0;
+}
+
+.cart-controls button{
+  width:28px;
+  height:28px;
+  border-radius:6px;
+  border:none;
+  background:#8A1538;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.cart-controls span{
+  min-width:22px;
+  text-align:center;
+  display:inline-block;
+}
+
 
 /* ===== ABOUT US – QATARI PREMIUM ===== */
 .about-wrap{
