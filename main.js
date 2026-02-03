@@ -14,7 +14,6 @@ function loginAdmin(e){
     .then(()=>{
       loginStatus.innerText="✅ Logged in";
       adminPanel.style.display="block";
-      loadAdminProducts();
     })
     .catch(err=>loginStatus.innerText="❌ "+err.message);
 }
@@ -23,14 +22,20 @@ function loginAdmin(e){
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 function toggleCart(){
-  cart.classList.toggle("open");
+  document.getElementById("cart").classList.toggle("open");
   renderCart();
 }
 
 function saveCart(){
   localStorage.setItem("cart",JSON.stringify(cart));
   updateCartCount();
-  renderCart();
+}
+
+function updateCartCount(){
+  const badge=document.getElementById("cartCount");
+  const c=cart.reduce((s,i)=>s+i.qty,0);
+  badge.style.display=c?"flex":"none";
+  badge.innerText=c;
 }
 
 function addToCart(id,name,price){
@@ -41,44 +46,21 @@ function addToCart(id,name,price){
   saveCart();
 }
 
-function updateCartCount(){
-  const c=cart.reduce((s,i)=>s+i.qty,0);
-  cartCount.style.display=c?"flex":"none";
-  cartCount.innerText=c;
-}
-
 function renderCart(){
-  cartItems.innerHTML="";
-  if(cart.length===0){
-    emptyCartMsg.style.display="block";
-    return;
-  }
-  emptyCartMsg.style.display="none";
-  cart.forEach((i,idx)=>{
-    cartItems.innerHTML+=`
-      <div>
-        <b>${i.name}</b><br>
+  const wrap=document.getElementById("cartItems");
+  const empty=document.getElementById("emptyCartMsg");
+  wrap.innerHTML="";
+  if(cart.length===0){empty.style.display="block";return;}
+  empty.style.display="none";
+
+  cart.forEach((i,n)=>{
+    wrap.innerHTML+=`
+      <div style="border-bottom:1px solid #eee;padding:10px 0">
+        <strong>${i.name}</strong><br>
         Size: ${i.size} | Qty: ${i.qty}<br>
         ₹${i.price*i.qty}
-        <div>
-          <button onclick="i.qty++;saveCart()">+</button>
-          <button onclick="i.qty--;if(i.qty<=0)cart.splice(${idx},1);saveCart()">−</button>
-        </div>
       </div>`;
   });
-}
-
-/* ===== WHATSAPP ===== */
-function checkoutWhatsApp(){
-  if(cart.length===0){alert("Cart empty");return;}
-  let msg="🖤 THE QATARI ABAYA 🖤\n\n";
-  let total=0;
-  cart.forEach(i=>{
-    total+=i.price*i.qty;
-    msg+=`${i.name} (${i.size}) x${i.qty}\n`;
-  });
-  msg+=`\nTotal: ₹${total}`;
-  window.open(`https://wa.me/9172081816783?text=${encodeURIComponent(msg)}`);
 }
 
 /* ===== PRODUCTS ===== */
@@ -89,34 +71,23 @@ db.collection("products").orderBy("createdAt","desc").onSnapshot(s=>{
     const poster=p.video.replace("/upload/","/upload/so_0/").replace(".mp4",".jpg");
     productGrid.innerHTML+=`
       <div class="product-card">
-        <img src="${poster}" class="product-thumb" onclick="openVideo('${p.video}')">
+        <img src="${poster}" class="product-thumb"
+          onclick="openVideo('${p.video}')">
         <div class="product-info">
           <h4>${p.name}</h4>
           <p>₹${p.price}</p>
           <select id="size-${d.id}">
-            <option value="">Size</option><option>S</option><option>M</option><option>L</option>
+            <option value="">Size</option>
+            <option>S</option><option>M</option>
+            <option>L</option><option>XL</option>
           </select>
-          <button onclick="addToCart('${d.id}','${p.name}',${p.price})">Add to Cart</button>
+          <button onclick="addToCart('${d.id}','${p.name}',${p.price})">
+            Add to Cart
+          </button>
         </div>
       </div>`;
   });
 });
-
-/* ===== ADMIN CRUD ===== */
-function loadAdminProducts(){
-  const wrap=document.createElement("div");
-  adminPanel.appendChild(wrap);
-  db.collection("products").onSnapshot(s=>{
-    wrap.innerHTML="<h3>Existing</h3>";
-    s.forEach(d=>{
-      const p=d.data();
-      wrap.innerHTML+=`
-        <div>${p.name} – ₹${p.price}
-        <button onclick="db.collection('products').doc('${d.id}').delete()">Delete</button>
-        </div>`;
-    });
-  });
-}
 
 /* ===== VIDEO ===== */
 function openVideo(src){
@@ -125,6 +96,7 @@ function openVideo(src){
 }
 function closeVideo(){
   modalVideo.pause();
+  modalVideo.src="";
   videoModal.style.display="none";
 }
 
