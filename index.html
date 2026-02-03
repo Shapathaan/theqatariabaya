@@ -13,10 +13,78 @@
   --text:#111;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Georgia,serif}
-body{background:var(--bg);color:var(--text)}
+/* RESET */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Georgia","Times New Roman",serif;
+}
+body{
+  background:var(--bg);
+  color:var(--text);
+}
 
-/* ===== HEADER ===== */
+/* ================= LANDING ================= */
+#landing{
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  background:black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#landing video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.landing-overlay{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  padding:0 20px;
+}
+.landing-overlay h1{
+  color:var(--gold);
+  font-size:clamp(34px,6vw,60px);
+  letter-spacing:14px;
+  opacity:0;
+  animation:titleReveal 2.8s ease forwards;
+}
+@keyframes titleReveal{
+  from{opacity:0;letter-spacing:40px;transform:translateY(40px)}
+  to{opacity:1;letter-spacing:14px;transform:translateY(0)}
+}
+.landing-overlay p{
+  margin-top:18px;
+  font-size:15px;
+  letter-spacing:2px;
+  color:#f1f1f1;
+  opacity:0;
+  animation:fadeIn 2s ease forwards;
+  animation-delay:2.8s;
+}
+.landing-overlay button{
+  margin-top:42px;
+  padding:16px 52px;
+  background:transparent;
+  border:2px solid var(--gold);
+  color:var(--gold);
+  border-radius:50px;
+  font-weight:700;
+  letter-spacing:2px;
+  cursor:pointer;
+  opacity:0;
+  animation:fadeIn 2s ease forwards;
+  animation-delay:4.5s;
+}
+@keyframes fadeIn{to{opacity:1}}
+
+/* ================= HEADER ================= */
 header{
   position:fixed;
   top:0;left:0;right:0;
@@ -24,28 +92,37 @@ header{
   background:#fff;
   border-bottom:3px solid var(--maroon);
   padding:10px 16px;
-  display:flex;
+  display:none;
   justify-content:space-between;
   align-items:center;
-  z-index:3000;
+  z-index:2000;
 }
 .logo img{height:52px}
 .admin-btn{color:var(--maroon);font-weight:700;cursor:pointer}
 
-/* ===== BANNER ===== */
-.banner{margin-top:72px}
-.banner img{width:100%;max-height:240px;object-fit:cover}
+/* ================= BANNER ================= */
+.banner{
+  margin-top:72px;
+  display:none;
+}
+.banner img{
+  width:100%;
+  max-height:240px;
+  object-fit:cover;
+}
 
-/* ===== MENU ===== */
+/* ================= MENU ================= */
 .glass-menu{
-  display:flex;
+  display:none;
   justify-content:center;
   gap:14px;
   margin:18px auto;
   padding:12px 18px;
+  width:fit-content;
   border-radius:22px;
   background:rgba(255,255,255,.65);
   backdrop-filter:blur(14px);
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
 }
 .glass-menu button{
   padding:10px 18px;
@@ -53,25 +130,31 @@ header{
   color:#fff;
   border:none;
   border-radius:16px;
+  font-weight:600;
   cursor:pointer;
 }
 
-/* ===== SECTIONS ===== */
+/* ================= SECTIONS ================= */
 section{display:none;padding:32px 16px}
 section.active{display:block}
-.section-inner{max-width:1200px;margin:auto;text-align:center}
+.section-inner{
+  max-width:1200px;
+  margin:0 auto;
+  text-align:center;
+}
 
-/* ===== PRODUCTS ===== */
+/* ================= PRODUCT GRID ================= */
 #productGrid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:18px;
+  margin-top:24px;
 }
 .product-card{
   background:#fff;
   border-radius:16px;
-  box-shadow:0 12px 24px rgba(0,0,0,.18);
   overflow:hidden;
+  box-shadow:0 12px 24px rgba(0,0,0,.18);
 }
 .product-thumb{
   width:100%;
@@ -80,62 +163,96 @@ section.active{display:block}
   cursor:pointer;
 }
 .product-info{padding:10px}
+.product-info h4{font-size:15px;margin-bottom:4px}
 .product-info p{color:var(--maroon);font-weight:700}
 
-@media(max-width:1000px){#productGrid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:600px){#productGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1000px){
+  #productGrid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:600px){
+  #productGrid{grid-template-columns:repeat(2,1fr)}
+  .product-thumb{height:150px}
+}
 
-/* ===== CART ===== */
+/* ================= CART (FIXED) ================= */
 .cart-btn{
   position:fixed;
   bottom:20px;
   right:20px;
-  width:56px;height:56px;
+  width:56px;
+  height:56px;
   background:var(--maroon);
   color:#fff;
   border-radius:50%;
-  display:flex;
-  justify-content:center;
+  display:none;
   align-items:center;
+  justify-content:center;
   font-size:24px;
   cursor:pointer;
-  z-index:3000;
+  z-index:2100;
 }
 .cart-btn span{
   position:absolute;
-  top:-6px;right:-6px;
+  top:-6px;
+  right:-6px;
   background:#e0002a;
-  width:20px;height:20px;
+  color:white;
+  font-size:12px;
+  width:20px;
+  height:20px;
   border-radius:50%;
   display:none;
-  justify-content:center;
   align-items:center;
-  font-size:12px;
+  justify-content:center;
+  font-weight:700;
 }
 
+/* ⬇️ THIS IS THE ONLY CART FIX */
 .cart-drawer{
   position:fixed;
   top:72px;
   right:-100%;
-  width:340px;
+  width:320px;
   height:calc(100% - 72px);
   background:#fff;
   padding:16px;
   transition:.3s;
-  z-index:2000;
+  z-index:1500;
   overflow-y:auto;
 }
 .cart-drawer.open{right:0}
 
-/* ===== VIDEO ===== */
+/* ================= ABOUT (ENHANCED) ================= */
+.about-box{
+  max-width:900px;
+  margin:0 auto;
+  line-height:1.9;
+  background:#fff;
+  padding:30px;
+  border-radius:18px;
+  box-shadow:0 14px 32px rgba(0,0,0,.15);
+}
+.about-title{
+  font-size:28px;
+  color:var(--maroon);
+  margin-bottom:16px;
+  letter-spacing:1px;
+}
+.about-divider{
+  margin:18px 0;
+  color:var(--gold);
+  letter-spacing:6px;
+}
+
+/* ================= VIDEO MODAL ================= */
 #videoModal{
   display:none;
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.85);
-  z-index:4000;
-  justify-content:center;
+  z-index:3000;
   align-items:center;
+  justify-content:center;
 }
 
 footer{text-align:center;padding:16px;opacity:.6}
@@ -144,19 +261,27 @@ footer{text-align:center;padding:16px;opacity:.6}
 
 <body>
 
+<!-- LANDING -->
+<div id="landing">
+  <video src="qatar-flag.mp4" autoplay muted loop playsinline></video>
+  <div class="landing-overlay">
+    <h1>THE QATARI ABAYA</h1>
+    <p>Qatari Elegance • Modern Modesty</p>
+    <button onclick="enterSite()">SHOP NOW</button>
+  </div>
+</div>
+
 <header>
   <div class="logo"><img src="icon-192.png"></div>
   <div class="admin-btn" onclick="navigate('admin')">Admin</div>
 </header>
 
-<div class="banner">
-  <img src="qatari.png">
-</div>
+<div class="banner"><img src="qatari.png"></div>
 
 <div class="glass-menu">
   <button onclick="navigate('products')">Products</button>
-  <button onclick="navigate('about')">About</button>
-  <button onclick="navigate('contact')">Contact</button>
+  <button onclick="navigate('about')">About Us</button>
+  <button onclick="navigate('contact')">Contact Us</button>
   <button onclick="toggleCart()">Cart</button>
 </div>
 
@@ -169,16 +294,20 @@ footer{text-align:center;padding:16px;opacity:.6}
 
 <section id="about">
   <div class="section-inner">
-    <h2>Qatari Elegance Meets Modern Modesty</h2>
-    <p style="max-width:900px;margin:auto;line-height:1.9">
-      Premium abayas inspired by Qatar. Designed for modern elegance.
-    </p>
+    <div class="about-box">
+      <div class="about-title">Qatari Elegance Meets Modern Modesty</div>
+      <div class="about-divider">✦ ✦ ✦</div>
+      <p>
+        At <b>The Qatari Abaya by Teepee's</b>, we redefine timeless tradition with
+        contemporary grace. Inspired by Qatar’s heritage and crafted for the modern woman.
+      </p>
+    </div>
   </div>
 </section>
 
 <section id="contact">
   <div class="section-inner">
-    <h2>Contact</h2>
+    <h2>Contact Us</h2>
     <p>WhatsApp: +91-87591345556</p>
   </div>
 </section>
@@ -188,21 +317,25 @@ footer{text-align:center;padding:16px;opacity:.6}
     <h2>Admin Panel</h2>
 
     <form onsubmit="loginAdmin(event)">
-      <input id="adminEmail" placeholder="Email" required>
+      <input id="adminEmail" placeholder="Admin Email" required>
       <input id="adminPassword" type="password" placeholder="Password" required>
       <button type="submit">Login</button>
     </form>
 
     <p id="loginStatus"></p>
 
-    <div id="adminPanel" style="display:none">
-      <h3>Add / Edit Product</h3>
-      <input id="pName" placeholder="Name">
-      <input id="pPrice" type="number" placeholder="Price">
-      <input id="pVideo" placeholder="Video URL" readonly>
-      <button onclick="openCloudinary()">Upload Video</button>
-      <button onclick="uploadProduct()">Save</button>
-      <div id="adminProducts"></div>
+    <div id="adminPanel" style="display:none;margin-top:30px;text-align:left">
+      <h3>Add Product</h3>
+      <input id="pName" placeholder="Product Name">
+      <input id="pPrice" type="number" placeholder="Price (₹)">
+      <input id="pVideo" placeholder="Cloudinary Video URL (.mp4)">
+      <select id="pBadge">
+        <option value="">No Badge</option>
+        <option value="NEW">NEW</option>
+        <option value="BESTSELLER">BESTSELLER</option>
+      </select>
+      <button onclick="uploadProduct()">Upload Product</button>
+      <p id="uploadStatus"></p>
     </div>
   </div>
 </section>
@@ -215,25 +348,18 @@ footer{text-align:center;padding:16px;opacity:.6}
     <span onclick="toggleCart()" style="cursor:pointer">✕</span>
   </div>
 
-  <div id="cartItems"></div>
-
-  <div id="cartFooter" style="display:none">
-    <input id="custName" placeholder="Name">
-    <input id="custPhone" placeholder="Phone">
-    <textarea id="custAddress" placeholder="Address"></textarea>
-    <button onclick="checkoutWhatsApp()">Checkout via WhatsApp</button>
-  </div>
-
-  <p id="emptyCartMsg">Your cart is empty</p>
+  <div id="cartItems" style="margin-top:16px"></div>
+  <p id="emptyCartMsg" style="margin-top:20px;opacity:.6">Your cart is empty</p>
+  <button onclick="checkoutWhatsApp()">Proceed to Checkout</button>
 </div>
 
 <div id="videoModal" onclick="closeVideo()">
-  <video id="modalVideo" controls style="width:90%;max-width:420px"></video>
+  <video id="modalVideo" controls playsinline preload="none"
+    style="width:90%;max-width:420px;background:black"></video>
 </div>
 
 <footer>© 2025 The Qatari Abaya by Teepee's</footer>
 
-<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -244,6 +370,14 @@ firebase.initializeApp({
   authDomain:"qatri-abaya.firebaseapp.com",
   projectId:"qatri-abaya"
 });
+
+function enterSite(){
+  landing.style.display="none";
+  document.querySelector("header").style.display="flex";
+  document.querySelector(".banner").style.display="block";
+  document.querySelector(".glass-menu").style.display="flex";
+  document.querySelector(".cart-btn").style.display="flex";
+}
 </script>
 
 <script src="main.js"></script>
