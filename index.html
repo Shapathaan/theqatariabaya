@@ -222,37 +222,37 @@ section.active{display:block}
 }
 .cart-drawer.open{right:0}
 
-/* ================= ABOUT US – QATARI THEME ================= */
-.about-qatari{
-  max-width:950px;
+/* ===== ABOUT US – QATARI PREMIUM ===== */
+.about-wrap{
+  max-width:960px;
   margin:0 auto;
   background:
     linear-gradient(
       135deg,
       #ffffff 0%,
-      #ffffff 62%,
-      #8A1538 62%,
+      #ffffff 65%,
+      #8A1538 65%,
       #8A1538 100%
     );
   border-radius:22px;
-  padding:40px 36px;
+  padding:44px 42px;
   box-shadow:0 18px 40px rgba(0,0,0,.18);
   position:relative;
   overflow:hidden;
 }
 
-.about-qatari::before{
+.about-wrap::before{
   content:"";
   position:absolute;
   top:0;
   left:0;
-  width:12px;
+  width:14px;
   height:100%;
   background:
     repeating-linear-gradient(
       to bottom,
-      #ffffff 0 12px,
-      #8A1538 12px 24px
+      #ffffff 0 14px,
+      #8A1538 14px 28px
     );
 }
 
@@ -265,7 +265,7 @@ section.active{display:block}
 }
 
 .about-divider{
-  margin:16px 0 24px;
+  margin:16px 0 26px;
   color:#F5E6C8;
   letter-spacing:6px;
   text-align:left;
@@ -273,26 +273,20 @@ section.active{display:block}
 
 .about-text{
   font-size:15.5px;
-  line-height:1.9;
-  margin-bottom:18px;
-  max-width:600px;
+  line-height:1.95;
+  margin-bottom:20px;
+  max-width:620px;
   text-align:left;
 }
 
-.about-highlight{
-  color:#8A1538;
-  font-weight:700;
-}
-
 @media(max-width:700px){
-  .about-qatari{
-    padding:28px 22px;
+  .about-wrap{
+    padding:26px 22px;
     background:#ffffff;
   }
-  .about-qatari::before{
-    display:none;
-  }
+  .about-wrap::before{display:none}
 }
+
 
 /* ================= VIDEO MODAL ================= */
 #videoModal{
@@ -345,7 +339,7 @@ footer{text-align:center;padding:16px;opacity:.6}
 <section id="about">
   <div class="section-inner">
 
-    <div class="about-qatari">
+    <div class="about-wrap">
 
       <h2 class="about-title">
         Qatari Elegance Meets Modern Modesty
@@ -354,31 +348,38 @@ footer{text-align:center;padding:16px;opacity:.6}
       <div class="about-divider">✦ ✦ ✦</div>
 
       <p class="about-text">
-        At <span class="about-highlight">The Qatari Abaya by Teepee's</span>,
-        we redefine timeless tradition with contemporary grace.
-        Inspired by the rich cultural heritage of Qatar, our collection
-        celebrates the enduring beauty of the abaya—crafted for the
+        At <strong>The Qatari Abaya by Teepee's</strong>, we redefine timeless tradition
+        with contemporary grace. Inspired by the rich cultural heritage of Qatar,
+        our collection celebrates the enduring beauty of the abaya—crafted for the
         modern woman who values modesty, sophistication, and effortless style.
       </p>
 
       <p class="about-text">
-        Founded in <span class="about-highlight">2025</span> in the vibrant heart of
-        <span class="about-highlight">Mumbai, India</span>, by the passionate
-        <span class="about-highlight">TeePee Family</span>, our journey began with a
-        simple vision: to bridge Qatari elegance with global modernity.
+        Founded in <strong>2025</strong> in the vibrant heart of
+        <strong>Mumbai, India</strong>, by the passionate <strong>TeePee Family</strong>,
+        our journey began with a simple vision: to bridge Qatari elegance with
+        global modernity. Drawing from generations of entrepreneurial spirit and a
+        deep appreciation for modest fashion, the TeePee Family sources premium
+        fabrics from the finest artisans, blending intricate Qatari embroidery with
+        sleek, versatile designs that transition seamlessly from day to dusk.
       </p>
 
       <p class="about-text">
-        Every piece reflects our commitment to quality, empowerment,
-        and cultural authenticity—ensuring you feel confident,
-        covered, and couture-ready wherever life takes you.
+        Every piece reflects our commitment to quality, empowerment, and cultural
+        authenticity, ensuring you feel confident, covered, and couture-ready—
+        wherever life takes you. From flowing silks that whisper luxury to tailored
+        fits that command presence, The Qatari Abaya is more than apparel—it's a
+        statement of poise and pride.
+      </p>
+
+      <p class="about-text">
+        Join us in honoring tradition while embracing tomorrow.
       </p>
 
     </div>
 
   </div>
 </section>
-
 
 <section id="contact">
   <div class="section-inner">
