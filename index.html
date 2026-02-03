@@ -174,7 +174,7 @@ section.active{display:block}
   .product-thumb{height:150px}
 }
 
-/* ================= CART (FIXED) ================= */
+/* ================= CART ================= */
 .cart-btn{
   position:fixed;
   bottom:20px;
@@ -207,97 +207,42 @@ section.active{display:block}
   font-weight:700;
 }
 
-/* ⬇️ THIS IS THE ONLY CART FIX */
-/* ===== CART UI POLISH ===== */
 .cart-drawer{
-  top:72px; /* header height */
+  position:fixed;
+  top:72px;
+  right:-100%;
+  width:320px;
   height:calc(100% - 72px);
+  background:#fff;
+  padding:16px;
+  transition:.3s;
+  z-index:2000;
   overflow-y:auto;
 }
+.cart-drawer.open{right:0}
 
-.cart-drawer h3{
-  margin:0;
-  padding-bottom:10px;
-}
-
-.cart-drawer .close-cart{
-  font-size:20px;
-  cursor:pointer;
-  font-weight:700;
-}
-
-.cart-row{
-  border-bottom:1px solid #eee;
-  padding:12px 0;
-}
-
-.cart-controls button{
-  width:28px;
-  height:28px;
-  border-radius:6px;
-  border:none;
-  background:#8A1538;
-  color:#fff;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.cart-controls span{
-  min-width:22px;
-  text-align:center;
-  display:inline-block;
-}
-
-
-/* ===== ABOUT US – QATARI PREMIUM ===== */
+/* ================= ABOUT US ================= */
 .about-wrap{
   max-width:960px;
   margin:0 auto;
   background:
-    linear-gradient(
-      135deg,
-      #ffffff 0%,
-      #ffffff 65%,
-      #8A1538 65%,
-      #8A1538 100%
-    );
+    linear-gradient(135deg,#fff 0%,#fff 65%,#8A1538 65%,#8A1538 100%);
   border-radius:22px;
   padding:44px 42px;
   box-shadow:0 18px 40px rgba(0,0,0,.18);
-  position:relative;
-  overflow:hidden;
 }
-
-.about-wrap::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  width:14px;
-  height:100%;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      #ffffff 0 14px,
-      #8A1538 14px 28px
-    );
-}
-
 .about-title{
   font-size:clamp(26px,4vw,36px);
   color:#8A1538;
-  letter-spacing:2px;
   margin-bottom:14px;
   text-align:left;
 }
-
 .about-divider{
   margin:16px 0 26px;
   color:#F5E6C8;
   letter-spacing:6px;
   text-align:left;
 }
-
 .about-text{
   font-size:15.5px;
   line-height:1.95;
@@ -305,15 +250,6 @@ section.active{display:block}
   max-width:620px;
   text-align:left;
 }
-
-@media(max-width:700px){
-  .about-wrap{
-    padding:26px 22px;
-    background:#ffffff;
-  }
-  .about-wrap::before{display:none}
-}
-
 
 /* ================= VIDEO MODAL ================= */
 #videoModal{
@@ -353,7 +289,7 @@ footer{text-align:center;padding:16px;opacity:.6}
   <button onclick="navigate('products')">Products</button>
   <button onclick="navigate('about')">About Us</button>
   <button onclick="navigate('contact')">Contact Us</button>
-  <span class="close-cart" onclick="toggleCart()">✕</span>
+  <button onclick="toggleCart()">Cart</button>
 </div>
 
 <section id="products" class="active">
@@ -365,13 +301,8 @@ footer{text-align:center;padding:16px;opacity:.6}
 
 <section id="about">
   <div class="section-inner">
-
     <div class="about-wrap">
-
-      <h2 class="about-title">
-        Qatari Elegance Meets Modern Modesty
-      </h2>
-
+      <h2 class="about-title">Qatari Elegance Meets Modern Modesty</h2>
       <div class="about-divider">✦ ✦ ✦</div>
 
       <p class="about-text">
@@ -384,27 +315,14 @@ footer{text-align:center;padding:16px;opacity:.6}
       <p class="about-text">
         Founded in <strong>2025</strong> in the vibrant heart of
         <strong>Mumbai, India</strong>, by the passionate <strong>TeePee Family</strong>,
-        our journey began with a simple vision: to bridge Qatari elegance with
-        global modernity. Drawing from generations of entrepreneurial spirit and a
-        deep appreciation for modest fashion, the TeePee Family sources premium
-        fabrics from the finest artisans, blending intricate Qatari embroidery with
-        sleek, versatile designs that transition seamlessly from day to dusk.
+        our journey began with a simple vision: to bridge Qatari elegance with global modernity.
       </p>
 
       <p class="about-text">
-        Every piece reflects our commitment to quality, empowerment, and cultural
-        authenticity, ensuring you feel confident, covered, and couture-ready—
-        wherever life takes you. From flowing silks that whisper luxury to tailored
-        fits that command presence, The Qatari Abaya is more than apparel—it's a
-        statement of poise and pride.
-      </p>
-
-      <p class="about-text">
+        Every piece reflects our commitment to quality, empowerment, and cultural authenticity.
         Join us in honoring tradition while embracing tomorrow.
       </p>
-
     </div>
-
   </div>
 </section>
 
@@ -418,39 +336,23 @@ footer{text-align:center;padding:16px;opacity:.6}
 <section id="admin">
   <div class="section-inner" style="max-width:420px">
     <h2>Admin Panel</h2>
-
     <form onsubmit="loginAdmin(event)">
       <input id="adminEmail" placeholder="Admin Email" required>
       <input id="adminPassword" type="password" placeholder="Password" required>
       <button type="submit">Login</button>
     </form>
-
     <p id="loginStatus"></p>
-
-    <div id="adminPanel" style="display:none;margin-top:30px;text-align:left">
-      <h3>Add Product</h3>
-      <input id="pName" placeholder="Product Name">
-      <input id="pPrice" type="number" placeholder="Price (₹)">
-      <input id="pVideo" placeholder="Cloudinary Video URL (.mp4)">
-      <select id="pBadge">
-        <option value="">No Badge</option>
-        <option value="NEW">NEW</option>
-        <option value="BESTSELLER">BESTSELLER</option>
-      </select>
-      <button onclick="uploadProduct()">Upload Product</button>
-      <p id="uploadStatus"></p>
-    </div>
+    <div id="adminPanel" style="display:none;margin-top:30px;text-align:left"></div>
   </div>
 </section>
 
 <div class="cart-btn" onclick="toggleCart()">🛒 <span id="cartCount">0</span></div>
 
 <div class="cart-drawer" id="cart">
-  <div style="display:flex;justify-content:space-between">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid #eee">
     <h3>Your Cart</h3>
-    <span onclick="toggleCart()" style="cursor:pointer">✕</span>
+    <span onclick="toggleCart()" style="cursor:pointer;font-size:20px">✕</span>
   </div>
-
   <div id="cartItems" style="margin-top:16px"></div>
   <p id="emptyCartMsg" style="margin-top:20px;opacity:.6">Your cart is empty</p>
   <button onclick="checkoutWhatsApp()">Proceed to Checkout</button>
