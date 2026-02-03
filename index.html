@@ -81,13 +81,16 @@ body{
 header{
   position:fixed;
   top:0;left:0;right:0;
+  height:72px;                 /* ✅ FIXED HEIGHT */
   background:#fff;
   border-bottom:3px solid var(--maroon);
   padding:10px 16px;
   display:none;
   justify-content:space-between;
-  z-index:1000;
+  align-items:center;
+  z-index:3000;                /* header stays above */
 }
+
 .logo img{height:52px}
 .admin-btn{color:var(--maroon);font-weight:700;cursor:pointer}
 
