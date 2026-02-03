@@ -244,8 +244,57 @@ section.active{display:block}
 
 footer{text-align:center;padding:16px;opacity:.6}
 </style>
-</head>
+  .about-wrap{
+  max-width:900px;
+  margin:0 auto;
+}
 
+.arabic-title{
+  font-size:clamp(26px,4vw,38px);
+  letter-spacing:2px;
+  color:#8A1538;
+  margin-bottom:12px;
+}
+
+.about-divider{
+  margin:18px 0;
+  color:#bfa76f;
+  letter-spacing:6px;
+}
+
+.about-text{
+  line-height:1.9;
+  margin-bottom:18px;
+  font-size:15px;
+}
+
+.insta-badge{
+  display:inline-block;
+  margin-top:22px;
+  padding:12px 26px;
+  border-radius:40px;
+  background:linear-gradient(135deg,#8A1538,#bfa76f);
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+  letter-spacing:1px;
+  box-shadow:0 10px 24px rgba(0,0,0,.25);
+}
+
+.insta-badge strong{
+  display:block;
+  margin-top:4px;
+  font-weight:700;
+}
+
+.about-footer{
+  margin-top:26px;
+  opacity:.6;
+  font-size:13px;
+}
+
+</head>
+<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 <body>
 
 <!-- LANDING -->
@@ -311,7 +360,7 @@ footer{text-align:center;padding:16px;opacity:.6}
     <div class="about-divider">✦ ✦ ✦</div>
 
     <a class="insta-badge"
-       href="https://instagram.com/YOUR_INSTAGRAM_HANDLE"
+       href="https://instagram.com/https://www.instagram.com/theqatariabaya?igsh=dHk4d3J5YXlkMWVt"
        target="_blank">
       <span>Follow us on Instagram</span>
       <strong>@theqatariabaya</strong>
@@ -349,7 +398,22 @@ footer{text-align:center;padding:16px;opacity:.6}
       <h3>Add Product</h3>
       <input id="pName" placeholder="Product Name">
       <input id="pPrice" type="number" placeholder="Price (₹)">
-      <input id="pVideo" placeholder="Cloudinary Video URL (.mp4)">
+      <input id="pVideo" placeholder="Video URL will appear here" readonly>
+
+<button type="button"
+  style="
+    margin-top:8px;
+    padding:10px;
+    width:100%;
+    background:#333;
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    cursor:pointer"
+  onclick="openCloudinary()">
+  Upload Video
+</button>
+
       <select id="pBadge">
         <option value="">No Badge</option>
         <option value="NEW">NEW</option>
