@@ -10,16 +10,17 @@ const db = firebase.firestore();
 /* ================= ADMIN LOGIN ================= */
 function loginAdmin(e){
   e.preventDefault();
-  loginStatus.innerText="Logging in...";
+  loginStatus.innerText = "Logging in...";
 
   firebase.auth()
     .signInWithEmailAndPassword(adminEmail.value, adminPassword.value)
     .then(()=>{
-      loginStatus.innerText="✅ Logged in";
-      adminPanel.style.display="block";
+      loginStatus.innerText = "✅ Logged in";
+      adminPanel.style.display = "block";
+      loadAdminProducts();
     })
     .catch(err=>{
-      loginStatus.innerText="❌ "+err.message;
+      loginStatus.innerText = "❌ " + err.message;
     });
 }
 
@@ -69,7 +70,7 @@ function changeQty(index, delta){
   saveCart();
 }
 
-/* ================= REMOVE ================= */
+/* ================= REMOVE ITEM ================= */
 function removeItem(index){
   cart.splice(index,1);
   saveCart();
@@ -81,7 +82,6 @@ function updateCartCount(){
   if(!badge) return;
 
   const count = cart.reduce((s,i)=>s+i.qty,0);
-
   if(count > 0){
     badge.style.display="flex";
     badge.innerText = count;
@@ -94,10 +94,9 @@ function updateCartCount(){
 function renderCart(){
   const itemsDiv = document.getElementById("cartItems");
   const emptyMsg = document.getElementById("emptyCartMsg");
-
   if(!itemsDiv) return;
 
-  itemsDiv.innerHTML="";
+  itemsDiv.innerHTML = "";
 
   if(cart.length === 0){
     emptyMsg.style.display="block";
@@ -108,15 +107,10 @@ function renderCart(){
 
   cart.forEach((item,i)=>{
     itemsDiv.innerHTML += `
-      <div style="
-        margin-bottom:14px;
-        padding-bottom:10px;
-        border-bottom:1px solid #eee
-      ">
+      <div style="margin-bottom:14px;border-bottom:1px solid #eee;padding-bottom:10px">
         <strong>${item.name}</strong><br>
         <small>Size: ${item.size}</small><br>
         ₹${item.price} × ${item.qty}
-
         <div style="margin-top:8px;display:flex;gap:6px">
           <button onclick="changeQty(${i},-1)">−</button>
           <button onclick="changeQty(${i},1)">+</button>
@@ -134,22 +128,17 @@ function checkoutWhatsApp(){
     return;
   }
 
-  let msg = `🖤 *The Qatari Abaya by Teepee's* 🖤\n\n`;
-  msg += `📦 *New Order*\n\n`;
-
+  let msg = `🖤 *The Qatari Abaya by Teepee's* 🖤\n\n📦 *New Order*\n\n`;
   let total = 0;
 
   cart.forEach((item,i)=>{
     total += item.price * item.qty;
     msg += `${i+1}. ${item.name}\n`;
-    msg += `   Size: ${item.size}\n`;
-    msg += `   Qty: ${item.qty}\n`;
-    msg += `   ₹${item.price * item.qty}\n\n`;
+    msg += `Size: ${item.size}\nQty: ${item.qty}\n₹${item.price * item.qty}\n\n`;
   });
 
   msg += `💰 *Total:* ₹${total}\n`;
-  msg += `🕒 ${new Date().toLocaleString()}\n\n`;
-  msg += `Please confirm availability`;
+  msg += `🕒 ${new Date().toLocaleString()}\n\nPlease confirm availability`;
 
   window.open(
     `https://wa.me/9172081816783?text=${encodeURIComponent(msg)}`,
@@ -157,14 +146,14 @@ function checkoutWhatsApp(){
   );
 }
 
-/* ================= LOAD PRODUCTS ================= */
+/* ================= LOAD PRODUCTS (SHOP) ================= */
 db.collection("products")
 .orderBy("createdAt","desc")
 .onSnapshot(snap=>{
   const grid = document.getElementById("productGrid");
   if(!grid) return;
 
-  grid.innerHTML="";
+  grid.innerHTML = "";
 
   snap.forEach(doc=>{
     const p = doc.data();
@@ -176,7 +165,6 @@ db.collection("products")
       <div class="product-card">
         <img src="${poster}" class="product-thumb"
              onclick="openVideo('${p.video}')">
-
         <div class="product-info">
           <h4>${p.name}</h4>
           <p>₹${p.price}</p>
@@ -187,19 +175,7 @@ db.collection("products")
             <option>L</option><option>XL</option><option>XXL</option>
           </select>
 
-          <button
-            style="
-              width:100%;
-              margin-top:8px;
-              padding:10px;
-              background:linear-gradient(145deg,#8A1538,#5e0f2a);
-              color:#fff;
-              border:none;
-              border-radius:12px;
-              font-weight:700;
-              cursor:pointer;
-            "
-            onclick="addToCart('${doc.id}','${p.name}',${p.price})">
+          <button onclick="addToCart('${doc.id}','${p.name}',${p.price})">
             Add to Cart
           </button>
         </div>
@@ -207,6 +183,72 @@ db.collection("products")
     `;
   });
 });
+
+/* ================= ADMIN PRODUCTS ================= */
+function loadAdminProducts(){
+  const wrap = document.createElement("div");
+  wrap.id = "adminProducts";
+  wrap.innerHTML = "<h3>Existing Products</h3>";
+  adminPanel.appendChild(wrap);
+
+  db.collection("products")
+    .orderBy("createdAt","desc")
+    .onSnapshot(snap=>{
+      wrap.innerHTML = "<h3>Existing Products</h3>";
+
+      snap.forEach(doc=>{
+        const p = doc.data();
+        wrap.innerHTML += `
+          <div style="margin:10px 0;border-bottom:1px solid #ddd;padding-bottom:8px">
+            <strong>${p.name}</strong> — ₹${p.price}
+            <div style="margin-top:6px">
+              <button onclick="editProduct('${doc.id}','${p.name}',${p.price},'${p.video}','${p.badge||""}')">Edit</button>
+              <button onclick="deleteProduct('${doc.id}')">Delete</button>
+            </div>
+          </div>
+        `;
+      });
+    });
+}
+
+function editProduct(id,name,price,video,badge){
+  pName.value = name;
+  pPrice.value = price;
+  pVideo.value = video;
+  pBadge.value = badge;
+  uploadStatus.innerText = "Editing product...";
+  uploadStatus.dataset.editing = id;
+}
+
+function uploadProduct(){
+  const data = {
+    name: pName.value,
+    price: Number(pPrice.value),
+    video: pVideo.value,
+    badge: pBadge.value,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  const editId = uploadStatus.dataset.editing;
+
+  if(editId){
+    db.collection("products").doc(editId).update(data);
+    uploadStatus.innerText = "✅ Product updated";
+    delete uploadStatus.dataset.editing;
+  } else {
+    db.collection("products").add(data);
+    uploadStatus.innerText = "✅ Product added";
+  }
+
+  pName.value = pPrice.value = pVideo.value = "";
+  pBadge.value = "";
+}
+
+function deleteProduct(id){
+  if(confirm("Delete this product?")){
+    db.collection("products").doc(id).delete();
+  }
+}
 
 /* ================= VIDEO MODAL ================= */
 function openVideo(src){
