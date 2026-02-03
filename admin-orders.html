@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Orders</title>
+</head>
+<body>
+<h2>Orders</h2>
+<div id="orders"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyAxJI4LaZu5AQyk4jJ0LTthxCGXQeJBaRQ",
+  authDomain:"qatri-abaya.firebaseapp.com",
+  projectId:"qatri-abaya"
+});
+const db=firebase.firestore();
+
+db.collection("orders").onSnapshot(s=>{
+  orders.innerHTML="";
+  s.forEach(d=>{
+    const o=d.data();
+    orders.innerHTML+=`
+      <div>
+        <strong>${d.id}</strong> — ${o.status}
+        <select onchange="db.collection('orders').doc('${d.id}').update({status:this.value})">
+          <option>PLACED</option>
+          <option>PROCESSING</option>
+          <option>OUT_FOR_DELIVERY</option>
+          <option>DELIVERED</option>
+        </select>
+      </div>`;
+  });
+});
+</script>
+</body>
+</html>
