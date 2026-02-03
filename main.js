@@ -1,12 +1,11 @@
-const db = firebase.firestore();
-
-/* NAV */
 function navigate(id){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-/* ADMIN LOGIN */
+const db = firebase.firestore();
+
+/* ===== ADMIN LOGIN ===== */
 function loginAdmin(e){
   e.preventDefault();
   loginStatus.innerText="Logging in...";
@@ -14,21 +13,17 @@ function loginAdmin(e){
     .signInWithEmailAndPassword(adminEmail.value, adminPassword.value)
     .then(()=>{
       loginStatus.innerText="✅ Logged in";
-      adminPanel.innerHTML = `
-        <button onclick="window.location='admin-orders.html'">
-          Manage Orders
-        </button>
-      `;
       adminPanel.style.display="block";
+      loadAdminProducts();
     })
     .catch(err=>loginStatus.innerText="❌ "+err.message);
 }
 
-/* CART */
+/* ===== CART ===== */
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 function toggleCart(){
-  document.getElementById("cart").classList.toggle("open");
+  cart.classList.toggle("open");
   renderCart();
 }
 
@@ -59,44 +54,35 @@ function renderCart(){
     return;
   }
   emptyCartMsg.style.display="none";
-
-  cart.forEach((item,i)=>{
+  cart.forEach((i,idx)=>{
     cartItems.innerHTML+=`
-      <div style="margin-bottom:12px;border-bottom:1px solid #eee">
-        <strong>${item.name}</strong><br>
-        Size: ${item.size} | Qty: ${item.qty}<br>
-        ₹${item.price * item.qty}
+      <div>
+        <b>${i.name}</b><br>
+        Size: ${i.size} | Qty: ${i.qty}<br>
+        ₹${i.price*i.qty}
         <div>
-          <button onclick="cart[${i}].qty++;saveCart()">+</button>
-          <button onclick="cart[${i}].qty--;if(cart[${i}].qty<=0)cart.splice(${i},1);saveCart()">−</button>
+          <button onclick="i.qty++;saveCart()">+</button>
+          <button onclick="i.qty--;if(i.qty<=0)cart.splice(${idx},1);saveCart()">−</button>
         </div>
       </div>`;
   });
 }
 
+/* ===== WHATSAPP ===== */
 function checkoutWhatsApp(){
   if(cart.length===0){alert("Cart empty");return;}
-
-  const order = {
-    items: cart,
-    total: cart.reduce((s,i)=>s+i.price*i.qty,0),
-    status:"PLACED",
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  };
-
-  db.collection("orders").add(order).then(ref=>{
-    let msg=`🖤 THE QATARI ABAYA 🖤\nOrder ID: ${ref.id}\n\n`;
-    cart.forEach(i=>{
-      msg+=`${i.name} (${i.size}) x${i.qty}\n`;
-    });
-    msg+=`\nTotal: ₹${order.total}`;
-    window.open(`https://wa.me/9172081816783?text=${encodeURIComponent(msg)}`);
-    cart=[];saveCart();
+  let msg="🖤 THE QATARI ABAYA 🖤\n\n";
+  let total=0;
+  cart.forEach(i=>{
+    total+=i.price*i.qty;
+    msg+=`${i.name} (${i.size}) x${i.qty}\n`;
   });
+  msg+=`\nTotal: ₹${total}`;
+  window.open(`https://wa.me/9172081816783?text=${encodeURIComponent(msg)}`);
 }
 
-/* PRODUCTS */
-db.collection("products").orderBy("position","asc").onSnapshot(s=>{
+/* ===== PRODUCTS ===== */
+db.collection("products").orderBy("createdAt","desc").onSnapshot(s=>{
   productGrid.innerHTML="";
   s.forEach(d=>{
     const p=d.data();
@@ -108,19 +94,31 @@ db.collection("products").orderBy("position","asc").onSnapshot(s=>{
           <h4>${p.name}</h4>
           <p>₹${p.price}</p>
           <select id="size-${d.id}">
-            <option value="">Size</option>
-            <option>S</option><option>M</option>
-            <option>L</option><option>XL</option>
+            <option value="">Size</option><option>S</option><option>M</option><option>L</option>
           </select>
-          <button onclick="addToCart('${d.id}','${p.name}',${p.price})">
-            Add to Cart
-          </button>
+          <button onclick="addToCart('${d.id}','${p.name}',${p.price})">Add to Cart</button>
         </div>
       </div>`;
   });
 });
 
-/* VIDEO */
+/* ===== ADMIN CRUD ===== */
+function loadAdminProducts(){
+  const wrap=document.createElement("div");
+  adminPanel.appendChild(wrap);
+  db.collection("products").onSnapshot(s=>{
+    wrap.innerHTML="<h3>Existing</h3>";
+    s.forEach(d=>{
+      const p=d.data();
+      wrap.innerHTML+=`
+        <div>${p.name} – ₹${p.price}
+        <button onclick="db.collection('products').doc('${d.id}').delete()">Delete</button>
+        </div>`;
+    });
+  });
+}
+
+/* ===== VIDEO ===== */
 function openVideo(src){
   videoModal.style.display="flex";
   modalVideo.src=src;
@@ -128,6 +126,17 @@ function openVideo(src){
 function closeVideo(){
   modalVideo.pause();
   videoModal.style.display="none";
+}
+
+/* ===== CLOUDINARY ===== */
+function openCloudinary(){
+  cloudinary.openUploadWidget({
+    cloudName:"dsdvlwxa4",
+    uploadPreset:"qatari-abaya",
+    resourceType:"video"
+  },(e,r)=>{
+    if(!e&&r.event==="success") pVideo.value=r.info.secure_url;
+  });
 }
 
 updateCartCount();
