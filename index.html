@@ -358,9 +358,34 @@ Join us in honoring tradition while embracing tomorrow.
 
 <div class="cart-drawer" id="cart">
   <h3>Your Cart</h3>
-  <div id="cartItems"></div>
-  <p id="emptyCartMsg">Your cart is empty</p>
-  <button onclick="checkoutWhatsApp()">Checkout on WhatsApp</button>
+ <div id="cartItems" style="margin-top:16px"></div>
+
+<div id="cartFooter" style="margin-top:14px;display:none">
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    font-weight:700;
+    margin-bottom:10px">
+    <span>Total</span>
+    <span id="cartTotal">₹0</span>
+  </div>
+
+  <!-- DELIVERY INFO -->
+  <input id="deliveryName" placeholder="Your Name">
+  <input id="deliveryPhone" placeholder="Phone Number">
+  <textarea id="deliveryAddress"
+    placeholder="Delivery Address"
+    style="width:100%;margin-top:8px;padding:10px"></textarea>
+
+  <button onclick="checkoutWhatsApp()">
+    Place Order on WhatsApp
+  </button>
+</div>
+
+<p id="emptyCartMsg" style="opacity:.6;margin-top:20px">
+  Your cart is empty
+</p>
+
 </div>
 
 <div id="videoModal" onclick="closeVideo()">
