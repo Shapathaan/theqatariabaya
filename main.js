@@ -12,10 +12,11 @@ function loginAdmin(e){
   firebase.auth()
     .signInWithEmailAndPassword(adminEmail.value, adminPassword.value)
     .then(()=>{
-      loginStatus.innerText="✅ Logged in";
+      loginStatus.innerText="Logged in";
       adminPanel.style.display="block";
+      loadAdminProducts();
     })
-    .catch(err=>loginStatus.innerText="❌ "+err.message);
+    .catch(err=>loginStatus.innerText=err.message);
 }
 
 /* ===== CART ===== */
@@ -29,38 +30,56 @@ function toggleCart(){
 function saveCart(){
   localStorage.setItem("cart",JSON.stringify(cart));
   updateCartCount();
-}
-
-function updateCartCount(){
-  const badge=document.getElementById("cartCount");
-  const c=cart.reduce((s,i)=>s+i.qty,0);
-  badge.style.display=c?"flex":"none";
-  badge.innerText=c;
+  renderCart();
 }
 
 function addToCart(id,name,price){
   const size=document.getElementById(`size-${id}`).value;
-  if(!size){alert("Select size");return;}
+  if(!size) return alert("Select size");
   const item=cart.find(i=>i.id===id&&i.size===size);
   item?item.qty++:cart.push({id,name,price,size,qty:1});
   saveCart();
 }
 
-function renderCart(){
-  const wrap=document.getElementById("cartItems");
-  const empty=document.getElementById("emptyCartMsg");
-  wrap.innerHTML="";
-  if(cart.length===0){empty.style.display="block";return;}
-  empty.style.display="none";
+function updateCartCount(){
+  const c=cart.reduce((s,i)=>s+i.qty,0);
+  const badge=document.getElementById("cartCount");
+  badge.style.display=c?"flex":"none";
+  badge.innerText=c;
+}
 
-  cart.forEach((i,n)=>{
-    wrap.innerHTML+=`
-      <div style="border-bottom:1px solid #eee;padding:10px 0">
-        <strong>${i.name}</strong><br>
-        Size: ${i.size} | Qty: ${i.qty}<br>
+function renderCart(){
+  const items=document.getElementById("cartItems");
+  const empty=document.getElementById("emptyCartMsg");
+  const footer=document.getElementById("cartFooter");
+
+  items.innerHTML="";
+  if(cart.length===0){
+    empty.style.display="block";
+    footer.style.display="none";
+    return;
+  }
+  empty.style.display="none";
+  footer.style.display="block";
+
+  cart.forEach((i,idx)=>{
+    items.innerHTML+=`
+      <div>
+        <b>${i.name}</b> (${i.size})<br>
         ₹${i.price*i.qty}
+        <button onclick="cart[idx].qty++;saveCart()">+</button>
+        <button onclick="cart[idx].qty--;if(cart[idx].qty<=0)cart.splice(idx,1);saveCart()">−</button>
       </div>`;
   });
+}
+
+/* ===== CHECKOUT ===== */
+function checkoutWhatsApp(){
+  let msg="NEW ORDER\n\n";
+  cart.forEach(i=>{
+    msg+=`${i.name} ${i.size} x${i.qty}\n`;
+  });
+  window.open(`https://wa.me/9172081816783?text=${encodeURIComponent(msg)}`);
 }
 
 /* ===== PRODUCTS ===== */
@@ -71,23 +90,32 @@ db.collection("products").orderBy("createdAt","desc").onSnapshot(s=>{
     const poster=p.video.replace("/upload/","/upload/so_0/").replace(".mp4",".jpg");
     productGrid.innerHTML+=`
       <div class="product-card">
-        <img src="${poster}" class="product-thumb"
-          onclick="openVideo('${p.video}')">
+        <img src="${poster}" class="product-thumb" onclick="openVideo('${p.video}')">
         <div class="product-info">
           <h4>${p.name}</h4>
           <p>₹${p.price}</p>
           <select id="size-${d.id}">
             <option value="">Size</option>
-            <option>S</option><option>M</option>
-            <option>L</option><option>XL</option>
+            <option>S</option><option>M</option><option>L</option>
           </select>
-          <button onclick="addToCart('${d.id}','${p.name}',${p.price})">
-            Add to Cart
-          </button>
+          <button onclick="addToCart('${d.id}','${p.name}',${p.price})">Add</button>
         </div>
       </div>`;
   });
 });
+
+/* ===== ADMIN ===== */
+function loadAdminProducts(){
+  const wrap=document.getElementById("adminProducts");
+  db.collection("products").orderBy("createdAt","desc").onSnapshot(s=>{
+    wrap.innerHTML="<h4>Existing</h4>";
+    s.forEach(d=>{
+      const p=d.data();
+      wrap.innerHTML+=`${p.name} ₹${p.price}
+      <button onclick="db.collection('products').doc('${d.id}').delete()">Delete</button><br>`;
+    });
+  });
+}
 
 /* ===== VIDEO ===== */
 function openVideo(src){
@@ -96,7 +124,6 @@ function openVideo(src){
 }
 function closeVideo(){
   modalVideo.pause();
-  modalVideo.src="";
   videoModal.style.display="none";
 }
 
